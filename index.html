@@ -98,7 +98,7 @@
         .contract-ul { list-style: none; padding-right: 0; }
         .contract-ul li { font-size: 14px; line-height: 1.8; color: #222; font-weight: 500; }
 
-        /* Signatures Layout (Matching the provided design) */
+        /* Signatures Layout */
         .sig-grid { 
             display: flex; 
             justify-content: space-between; 
@@ -208,7 +208,11 @@
                             <input type="text" id="in_dept" class="form-control" placeholder="مثال: الموارد البشرية" oninput="updateContractPreview()">
                         </div>
                         <div class="form-group">
-                            <label>تاريخ الانضمام</label>
+                            <label>تاريخ الاتفاق (التحرير)</label>
+                            <input type="date" id="in_today" class="form-control" onchange="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ الانضمام الفعلي</label>
                             <input type="date" id="in_startDate" class="form-control" onchange="updateContractPreview()">
                         </div>
                         <div class="form-group">
@@ -237,7 +241,7 @@
 
                     <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
 
-                    <div class="contract-row">تم الاتفاق في تاريخ: ( <span class="fill-val" id="p_today">2026/09/04</span> ) بين كل من:</div>
+                    <div class="contract-row">تم الاتفاق في تاريخ: ( <span class="fill-val" id="p_today">..../../....</span> ) بين كل من:</div>
                     <div class="contract-row">الطرف الأول : إدارة فريق (شمس) التطوّعي</div>
                     <div class="contract-row">الطرف الثاني : المتطوع/ـة ( <span class="fill-val" id="p_name">...................</span> )</div>
                     <div class="contract-row">رقم الهوية / الإقامة: ( <span class="fill-val" id="p_id">...................</span> )</div>
@@ -269,10 +273,10 @@
 
                     <div class="section-h">رابعاً : مدة العقد و انهاؤه</div>
                     <div class="contract-row">مدة العقد: ( <span class="fill-val" id="p_duration">1 شهر</span> )</div>
-                    <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">2026/09/04</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">2026/10/04</span> )</div>
+                    <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">..../../....</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">..../../....</span> )</div>
                     <p style="font-size:14px; line-height: 1.8; margin-top: 5px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
 
-                    <!-- Signatures Section (3 Signatures with fixed signature images like the design) -->
+                    <!-- Signatures Section -->
                     <div class="sig-grid">
                         <div class="sig-box">
                             <div class="title">التوقيع</div>
@@ -449,6 +453,7 @@
             const phone = document.getElementById('in_phone').value || '...................';
             const dob = document.getElementById('in_dob').value || '...................';
             const dept = document.getElementById('in_dept').value || '...................';
+            const todayVal = document.getElementById('in_today').value;
             const startDateVal = document.getElementById('in_startDate').value;
             const durationVal = parseInt(document.getElementById('in_duration').value);
 
@@ -457,14 +462,25 @@
             document.getElementById('p_phone').innerText = phone;
             document.getElementById('p_dob').innerText = dob;
             document.getElementById('p_dept').innerText = dept;
+
+            if(todayVal) {
+                document.getElementById('p_today').innerText = todayVal;
+            } else {
+                document.getElementById('p_today').innerText = '..../../....';
+            }
+
+            let startDate = startDateVal ? new Date(startDateVal) : null;
+            if(startDate) {
+                document.getElementById('p_startDate').innerText = startDate.toISOString().split('T')[0];
+                let endDate = new Date(startDate);
+                endDate.setMonth(endDate.getMonth() + durationVal);
+                document.getElementById('p_endDate').innerText = endDate.toISOString().split('T')[0];
+            } else {
+                document.getElementById('p_startDate').innerText = '..../../....';
+                document.getElementById('p_endDate').innerText = '..../../....';
+            }
+
             document.getElementById('p_duration').innerText = durationVal + ' شهر';
-
-            let startDate = startDateVal ? new Date(startDateVal) : new Date();
-            let endDate = new Date(startDate);
-            endDate.setMonth(endDate.getMonth() + durationVal);
-
-            document.getElementById('p_startDate').innerText = startDate.toISOString().split('T')[0];
-            document.getElementById('p_endDate').innerText = endDate.toISOString().split('T')[0];
         }
 
         // Contract Download Feature
@@ -568,7 +584,8 @@
             const id = document.getElementById('in_id').value;
             if(!name || !id) { alert('يرجى كتابة الاسم الكامل ورقم الهوية أولاً'); return; }
 
-            const startDateVal = document.getElementById('in_startDate').value || new Date().toISOString().split('T')[0];
+            const todayVal = document.getElementById('in_today').value || new Date().toISOString().split('T')[0];
+            const startDateVal = document.getElementById('in_startDate').value || todayVal;
             const durationVal = parseInt(document.getElementById('in_duration').value);
             
             let startDate = new Date(startDateVal);
