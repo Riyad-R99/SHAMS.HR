@@ -1,0 +1,20 @@
+{
+  "name": "فريق شمس - إدارة العقود",
+  "short_name": "شمس للتطوع",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#000a30",
+  "theme_color": "#000a30",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
