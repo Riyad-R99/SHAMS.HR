@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فريق شمس التطوعي - إدارة الموارد البشرية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-orange: #f37021;
+            --dark-navy: #000a30;
+            --text-black: #111111;
+            --bg-body: #f4f6f9;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-black);
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Full page watermark */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 550px;
+            height: 550px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><path fill="%23f37021" opacity="0.04" d="M250,50 C260,100 290,120 320,100 C310,140 350,160 380,140 C350,180 390,210 420,200 C370,230 400,270 420,300 C370,300 370,350 380,390 C340,360 320,400 300,430 C280,390 250,420 230,450 C230,400 190,410 170,430 C180,380 140,370 120,380 C150,340 120,310 90,300 C130,270 110,230 80,210 C120,200 120,160 100,130 C140,150 170,120 180,80 C200,120 230,100 250,50 Z"/></svg>') no-repeat center center;
+            background-size: contain;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Auth Screen */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .auth-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            text-align: center;
+            border: 1px solid #e1e6eb;
+        }
+
+        .auth-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--dark-navy);
+            margin-bottom: 6px;
+        }
+
+        .auth-subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: var(--dark-navy);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 3px rgba(243, 112, 33, 0.15);
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-orange);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background-color: #d95f17;
+        }
+
+        /* Top Action Bar */
+        .top-bar {
+            max-width: 850px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .btn-action {
+            padding: 10px 22px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-print {
+            background-color: var(--primary-orange);
+            color: white;
+        }
+
+        .btn-logout {
+            background-color: #4a5568;
+            color: white;
+        }
+
+        /* Contract Paper Exact Replica */
+        .contract-wrapper {
+            max-width: 850px;
+            margin: 20px auto 40px;
+            padding: 0 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .contract-card {
+            background: #ffffff;
+            padding: 45px 50px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Watermark image inside contract */
+        .contract-card::before {
+            content: "";
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 480px;
+            height: 480px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><path fill="%23f37021" opacity="0.05" d="M250,50 C260,100 290,120 320,100 C310,140 350,160 380,140 C350,180 390,210 420,200 C370,230 400,270 420,300 C370,300 370,350 380,390 C340,360 320,400 300,430 C280,390 250,420 230,450 C230,400 190,410 170,430 C180,380 140,370 120,380 C150,340 120,310 90,300 C130,270 110,230 80,210 C120,200 120,160 100,130 C140,150 170,120 180,80 C200,120 230,100 250,50 Z"/></svg>') no-repeat center center;
+            background-size: contain;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .contract-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .contract-main-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 900;
+            color: #000000;
+            margin: 15px 0 25px 0;
+        }
+
+        .contract-row {
+            font-size: 15px;
+            line-height: 2;
+            color: #111;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .fill-line {
+            display: inline-block;
+            border-bottom: 1px solid #777;
+            min-width: 150px;
+            text-align: center;
+            padding: 0 5px;
+            font-weight: 700;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 900;
+            color: #000;
+            margin: 18px 0 8px 0;
+        }
+
+        .contract-list {
+            list-style: none;
+            padding-right: 0;
+        }
+
+        .contract-list li {
+            font-size: 14.5px;
+            line-height: 1.9;
+            color: #222;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        /* Signatures Grid */
+        .signatures-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 45px;
+            padding-top: 10px;
+        }
+
+        .sig-box {
+            text-align: center;
+            font-weight: 800;
+            font-size: 14px;
+            color: #000;
+        }
+
+        @media print {
+            body { background: white !important; }
+            body::before, .top-bar, .auth-container { display: none !important; }
+            .contract-wrapper { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            .contract-card { box-shadow: none !important; padding: 20px 30px !important; border: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Section -->
+    <div class="auth-container" id="authSection">
+        <div class="auth-card">
+            <div style="margin-bottom: 15px;">
+                <svg width="150" height="90" viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M150,20 C158,50 180,60 200,50 C190,80 220,90 240,80 C220,100 240,120 260,120 C230,135 245,160 255,180 C225,170 210,195 200,210 C185,180 165,200 150,220 C135,200 115,180 100,210 C90,195 75,170 45,180 C55,160 70,135 40,120 C60,120 80,100 60,80 C80,90 110,80 100,50 C120,60 142,50 150,20 Z" fill="#f37021"/>
+                    <circle cx="150" cy="130" r="50" fill="#fbb03b"/>
+                    <text x="150" y="132" font-family="'Tajawal', sans-serif" font-weight="900" font-size="24" fill="#000a30" text-anchor="middle">فريق شمس التطوعي</text>
+                    <text x="150" y="152" font-family="Arial, sans-serif" font-weight="bold" font-size="10" fill="#000a30" text-anchor="middle" letter-spacing="2">EXECUTIVE MANAGEMENT</text>
+                </svg>
+            </div>
+            <h1 class="auth-title">تسجيل الدخول</h1>
+            <p class="auth-subtitle">إدارة شمس التطوعي - الموارد البشرية</p>
+
+            <form onsubmit="event.preventDefault(); document.getElementById('authSection').style.display='none'; document.getElementById('appContent').style.display='block';">
+                <div class="form-group">
+                    <label>اسم المستخدم</label>
+                    <input type="text" class="form-control" placeholder="أدخل اسم المستخدم" required value="admin">
+                </div>
+                <div class="form-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" class="form-control" placeholder="••••••••" required value="123456">
+                </div>
+                <button type="submit" class="btn-submit">دخول النظام</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contract Section -->
+    <div id="appContent" style="display: none;">
+        
+        <div class="top-bar">
+            <button onclick="document.getElementById('authSection').style.display='flex'; document.getElementById('appContent').style.display='none';" class="btn-action btn-logout">
+                <i class="fas fa-sign-out-alt"></i> تسجيل خروج
+            </button>
+            <button onclick="window.print();" class="btn-action btn-print">
+                <i class="fas fa-print"></i> طباعة العقد
+            </button>
+        </div>
+
+        <div class="contract-wrapper">
+            <div class="contract-card">
+                <div class="contract-content">
+                    
+                    <!-- Top Logo -->
+                    <div style="text-align: right;">
+                        <svg width="220" height="100" viewBox="0 0 320 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M110,15 C118,38 135,45 150,38 C142,60 165,68 180,60 C165,75 180,90 195,90 C172,102 184,120 192,135 C168,128 158,146 150,158 C138,135 124,150 112,165 C105,150 93,132 70,140 C78,124 88,105 65,95 C80,95 95,80 80,65 C95,72 118,65 110,38 C125,45 140,38 110,15 Z" fill="#f37021"/>
+                            <circle cx="120" cy="98" r="42" fill="#fbb03b"/>
+                            <text x="120" y="98" font-family="'Tajawal', sans-serif" font-weight="900" font-size="20" fill="#000a30" text-anchor="middle">فريق شمس التطوعي</text>
+                            <text x="120" y="115" font-family="Arial" font-weight="bold" font-size="8" fill="#000a30" text-anchor="middle" letter-spacing="1.5">EXECUTIVE MANAGEMENT</text>
+                        </svg>
+                    </div>
+
+                    <div class="contract-main-title">عقد اتفاقية انضمام لادارة "شمس" التطوعي</div>
+
+                    <div class="contract-row">
+                        تم الاتفاق في تاريخ: ( <span class="fill-line">2026 / / </span> ) بين كل من
+                    </div>
+                    <div class="contract-row">
+                        الطرف الأول : إدارة فريق (شمس) التطوّعي
+                    </div>
+                    <div class="contract-row">
+                        الطرف الثاني : المتطوع/ـة ( <span class="fill-line" style="min-width: 280px;"></span> )
+                    </div>
+                    <div class="contract-row">
+                        رقم الهوية ( <span class="fill-line" style="min-width: 200px;"></span> )
+                    </div>
+                    <div class="contract-row">
+                        رقم الجوال ( <span class="fill-line" style="min-width: 200px;"></span> )
+                    </div>
+                    <div class="contract-row">
+                        القسم ( <span class="fill-line" style="min-width: 240px;"></span> )
+                    </div>
+
+                    <div class="section-title">أولاً : موضوع العقد</div>
+                    <p style="font-size: 14.5px; line-height: 1.8; font-weight: 500; color: #222;">
+                        انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.
+                    </p>
+
+                    <div class="section-title">ثانياً : واجبات المتطوع</div>
+                    <ul class="contract-list">
+                        <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
+                        <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
+                        <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
+                        <li>4. الالتزام بتتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
+                        <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
+                        <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسمياً.</li>
+                    </ul>
+
+                    <div class="section-title">ثالثاً : حقوق الإدارة</div>
+                    <ul class="contract-list">
+                        <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
+                        <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
+                        <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
+                        <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
+                        <li>5. حفظ بيانات وسجلات المتطوع.</li>
+                    </ul>
+
+                    <div class="section-title">رابعاً : مدة العقد و إنهائه</div>
+                    <div class="contract-row" style="font-weight: 500; font-size: 14.5px;">
+                        مدة العقد: ( <span class="fill-line" style="min-width: 80px;">شهر</span> )
+                    </div>
+                    <div class="contract-row" style="font-weight: 500; font-size: 14.5px;">
+                        تبدأ من تاريخ: ( <span class="fill-line">2026 / / </span> ) وتنتهي في: ( <span class="fill-line">2026 / / </span> )
+                    </div>
+                    <p style="font-size: 14px; line-height: 1.8; font-weight: 500; color: #222; margin-top: 5px;">
+                        يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.
+                    </p>
+
+                    <!-- Signatures -->
+                    <div class="signatures-grid">
+                        <div class="sig-box">
+                            توقيع رئيس الموارد البشرية
+                            <div style="margin-top: 15px;">
+                                <svg width="120" height="35" viewBox="0 0 120 35">
+                                    <path d="M10,25 Q30,5 50,25 T90,8 T110,20" fill="none" stroke="#000" stroke-width="2"/>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div class="sig-box">
+                            توقيع رئيس الرئيسي التنفيذي
+                        </div>
+
+                        <div class="sig-box">
+                            التوقيع
+                        </div>
+                    </div>
+
+                    <!-- Bottom Small Logo -->
+                    <div style="margin-top: 25px; text-align: right;">
+                        <svg width="100" height="40" viewBox="0 0 200 80">
+                            <path d="M40,10 C45,20 55,25 60,20 C55,30 65,35 70,30 C60,40 70,45 75,45 C65,50 70,60 60,55 C55,65 50,55 45,65 C40,55 35,60 30,50 C25,55 20,45 15,40 C25,40 20,30 30,30 C25,20 35,20 40,10 Z" fill="#f37021"/>
+                            <circle cx="45" cy="40" r="18" fill="#fbb03b"/>
+                            <text x="45" y="42" font-family="'Tajawal', sans-serif" font-weight="800" font-size="8" fill="#000a30" text-anchor="middle">فريق شمس التطوعي</text>
+                        </svg>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
