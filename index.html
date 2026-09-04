@@ -98,21 +98,27 @@
         .contract-ul { list-style: none; padding-right: 0; }
         .contract-ul li { font-size: 14px; line-height: 1.8; color: #222; font-weight: 500; }
 
-        /* Signatures Layout */
+        /* Signatures Layout (Matching the provided design) */
         .sig-grid { 
             display: flex; 
-            justify-content: space-around; 
+            justify-content: space-between; 
             align-items: flex-end; 
-            margin-top: 60px; 
+            margin-top: 50px; 
             padding-top: 20px; 
             border-top: 1px solid #e2e8f0; 
         }
-        .sig-box { text-align: center; min-width: 180px; }
+        .sig-box { text-align: center; flex: 1; padding: 0 5px; }
         .sig-box .title { 
             color: #000; 
-            font-size: 14px; 
+            font-size: 12px; 
             font-weight: 800; 
-            margin-bottom: 40px; 
+            margin-bottom: 10px; 
+        }
+        .sig-box img {
+            width: 110px;
+            height: auto;
+            object-fit: contain;
+            display: inline-block;
         }
 
         /* Action Buttons */
@@ -247,21 +253,38 @@
                         <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
                         <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
                         <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
+                        <li>4. الالتزام بتتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
+                        <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
+                        <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
                     </ul>
 
-                    <div class="section-h">ثالثاً : مدة العقد وتاريخ الانتهاء</div>
-                    <div class="contract-row">مدة العقد: ( <span class="fill-val" id="p_duration">1 شهر</span> )</div>
-                    <div class="contract-row">تاريخ الانضمام: ( <span class="fill-val" id="p_startDate">2026/09/04</span> )</div>
-                    <div class="contract-row">تاريخ الانتهاء التلقائي: ( <span class="fill-val" id="p_endDate">2026/10/04</span> )</div>
+                    <div class="section-h">ثالثاً : حقوق الإدارة</div>
+                    <ul class="contract-ul">
+                        <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
+                        <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
+                        <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
+                        <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
+                        <li>5. حفظ بيانات وسجلات المتطوع.</li>
+                    </ul>
 
-                    <!-- Signatures Section (Titles only, no drawings below) -->
+                    <div class="section-h">رابعاً : مدة العقد و انهاؤه</div>
+                    <div class="contract-row">مدة العقد: ( <span class="fill-val" id="p_duration">1 شهر</span> )</div>
+                    <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">2026/09/04</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">2026/10/04</span> )</div>
+                    <p style="font-size:14px; line-height: 1.8; margin-top: 5px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
+
+                    <!-- Signatures Section (3 Signatures with fixed signature images like the design) -->
                     <div class="sig-grid">
                         <div class="sig-box">
-                            <div class="title">رئيس قسم الموارد البشرية</div>
+                            <div class="title">التوقيع</div>
+                            <img src="https://your-website.com/contract.jpg" alt="توقيع الطرف الثاني">
                         </div>
-
                         <div class="sig-box">
-                            <div class="title">الرئيس التنفيذي</div>
+                            <div class="title">رئيس قسم الموارد البشرية</div>
+                            <img src="https://your-website.com/contract.jpg" alt="توقيع الموارد البشرية">
+                        </div>
+                        <div class="sig-box">
+                            <div class="title">توقيع الرئيس التنفيذي</div>
+                            <img src="https://your-website.com/contract.jpg" alt="توقيع الرئيس التنفيذي">
                         </div>
                     </div>
                 </div>
@@ -434,7 +457,7 @@
             document.getElementById('p_phone').innerText = phone;
             document.getElementById('p_dob').innerText = dob;
             document.getElementById('p_dept').innerText = dept;
-            document.getElementById('p_duration').innerText = durationVal + ' أشهر';
+            document.getElementById('p_duration').innerText = durationVal + ' شهر';
 
             let startDate = startDateVal ? new Date(startDateVal) : new Date();
             let endDate = new Date(startDate);
