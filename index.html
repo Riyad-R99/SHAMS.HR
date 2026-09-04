@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فريق شمس التطوعي - نظام إدارة وأرشيف العقود (متزامن)</title>
+    <title>فريق شمس التطوعي - نظام إدارة وأرشيف العقود</title>
     
     <!-- إعدادات تطبيق الـ PWA للجوال -->
     <link rel="manifest" href="manifest.json">
@@ -15,6 +15,10 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- مكتبة تحويل HTML إلى PDF مباشرة -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
     <style>
         :root {
             --primary-orange: #f37021;
@@ -243,7 +247,7 @@
 
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button onclick="saveAndArchiveContract()" class="btn-action btn-orange"><i class="fas fa-save"></i> حفظ العقد في الأرشيف السحابي</button>
-                        <button onclick="downloadContractHTML()" class="btn-action btn-green"><i class="fas fa-file-download"></i> تنزيل العقد (ملف)</button>
+                        <button onclick="downloadContractPDF()" class="btn-action btn-green"><i class="fas fa-file-pdf"></i> تنزيل العقد (ملف)</button>
                         <button onclick="window.print()" class="btn-action btn-navy"><i class="fas fa-print"></i> طباعة العقد مباشر</button>
                     </div>
                 </div>
@@ -697,14 +701,20 @@
             document.getElementById('p_duration').innerText = durationVal + ' شهر';
         }
 
-        function downloadContractHTML() {
+        // دالة تنزيل العقد بصيغة PDF مباشرة عند الضغط على زر (تنزيل العقد)
+        function downloadContractPDF() {
             const name = document.getElementById('in_name').value || 'عقد_متطوع';
-            const content = document.getElementById('contractPaper').outerHTML;
-            const blob = new Blob([`<html><head><title>عقد ${name}</title><style>body{font-family:'Tajawal',sans-serif;padding:30px;}</style></head><body>${content}</body></html>`], { type: 'text/html' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `عقد_${name}.html`;
-            a.click();
+            const element = document.getElementById('contractPaper');
+            
+            const opt = {
+                margin:       10,
+                filename:     `عقد_${name}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().from(element).set(opt).save();
         }
 
         function renderUsers() {
