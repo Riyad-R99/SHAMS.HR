@@ -28,58 +28,98 @@
         .contract-paper {
             background: white;
             width: 800px;
-            padding: 50px 60px;
+            padding: 40px 50px;
             margin: 0 auto;
             box-shadow: 0 0 15px rgba(0,0,0,0.2);
             box-sizing: border-box;
             position: relative;
             color: #000;
             line-height: 1.8;
-            font-size: 15px;
+            font-size: 14px;
         }
 
-        .header-logo {
+        /* الهيدر العلوي مع الشعار */
+        .header-logo-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            border-bottom: 2px solid #f57c00;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
         }
 
-        .sun-logo-top {
-            width: 180px;
+        .logo-box {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sun-icon {
+            width: 55px;
+            height: 55px;
+        }
+
+        .logo-text-main {
+            font-size: 24px;
+            font-weight: 900;
+            color: #0a192f;
+            line-height: 1.1;
+        }
+
+        .logo-text-sub {
+            font-size: 12px;
+            color: #f57c00;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .header-title-right {
+            text-align: left;
+            font-size: 13px;
+            color: #555;
+            font-weight: bold;
         }
 
         .contract-title {
             text-align: center;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
-            color: #000;
-            margin-bottom: 25px;
+            color: #0a192f;
+            margin-bottom: 20px;
+            background: #fff8f0;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px dashed #f57c00;
         }
 
         .section-header {
-            font-size: 17px;
+            font-size: 15px;
             font-weight: bold;
-            margin-top: 15px;
-            margin-bottom: 5px;
+            color: #0a192f;
+            margin-top: 12px;
+            margin-bottom: 4px;
+            border-right: 4px solid #f57c00;
+            padding-right: 8px;
         }
 
         .fill-text {
             font-weight: bold;
             color: #000;
             text-decoration: underline;
-            padding: 0 5px;
+            padding: 0 4px;
         }
 
-        ol { margin: 5px 0 15px 0; padding-right: 20px; }
-        ol li { margin-bottom: 4px; }
+        ol { margin: 4px 0 10px 0; padding-right: 20px; }
+        ol li { margin-bottom: 3px; }
 
         .footer-signatures {
-            margin-top: 40px;
+            margin-top: 35px;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
             text-align: center;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
         }
 
         .sig-block {
@@ -88,13 +128,14 @@
 
         .sig-title {
             font-weight: bold;
-            font-size: 14px;
-            margin-bottom: 15px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            color: #0a192f;
         }
 
         /* توقيع رئيس قسم الموارد البشرية */
         .hr-signature-img {
-            height: 60px;
+            height: 50px;
         }
 
         /* توقيع الرئيس التنفيذي مع الشعار */
@@ -105,7 +146,7 @@
         }
 
         .exec-sig-img {
-            height: 55px;
+            height: 50px;
         }
 
         /* جدول خزينة العقود */
@@ -120,7 +161,7 @@
         @media print {
             body { background: white; padding: 0; }
             .no-print { display: none !important; }
-            .contract-paper { box-shadow: none; width: 100%; padding: 20px; }
+            .contract-paper { box-shadow: none; width: 100%; padding: 0; }
         }
     </style>
 </head>
@@ -159,12 +200,12 @@
                 <div><label>تاريخ بداية العقد:</label><input type="date" id="startDate"></div>
                 <div class="full-width"><label>مدة العقد (بالأشهر):</label><input type="number" id="durationMonths" value="3"></div>
                 <div class="full-width">
-                    <button onclick="generateContract()">توليد العقد المكتمل</button>
+                    <button onclick="generateContract()">توليد العقد المكتمل مع الشعار</button>
                 </div>
             </div>
         </div>
 
-        <!-- 3. عرض العقد الكامل مع التواقيع وتعديل البيانات -->
+        <!-- 3. عرض العقد الكامل مع الشعار والتواقيع -->
         <div id="contractPreviewSection" class="hidden">
             <div class="card no-print" style="display: flex; gap: 10px; justify-content: center;">
                 <button onclick="showSection('create')" class="btn-edit" style="width: auto;">✏️ تعديل البيانات / عودة</button>
@@ -174,6 +215,35 @@
 
             <div class="contract-paper" id="contractPaper">
                 
+                <!-- هيدر الشعار الرسمي لفريق شمس التطوعي -->
+                <div class="header-logo-container">
+                    <div class="logo-box">
+                        <!-- رسم أسرع وأوضح لشعار فريق شمس (الشمس المشرقة) -->
+                        <svg class="sun-icon" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="20" fill="#f57c00" />
+                            <g stroke="#f57c00" stroke-width="5" stroke-linecap="round">
+                                <line x1="50" y1="10" x2="50" y2="20" />
+                                <line x1="50" y1="80" x2="50" y2="90" />
+                                <line x1="10" y1="50" x2="20" y2="50" />
+                                <line x1="80" y1="50" x2="90" y2="50" />
+                                <line x1="22" y1="22" x2="29" y2="29" />
+                                <line x1="71" y1="71" x2="78" y2="78" />
+                                <line x1="22" y1="78" x2="29" y2="71" />
+                                <line x1="71" y1="29" x2="78" y2="22" />
+                            </g>
+                        </svg>
+                        <div>
+                            <div class="logo-text-main">شمس</div>
+                            <div class="logo-text-sub">SHAMS VOLUNTEER TEAM</div>
+                        </div>
+                    </div>
+                    <div class="header-title-right">
+                        فريق شمس التطوعي<br>
+                        إدارة الموارد البشرية<br>
+                        قسم العقود والاتفاقيات
+                    </div>
+                </div>
+
                 <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
 
                 <p>
@@ -216,13 +286,12 @@
 
                 <div class="footer-signatures">
                     <div class="sig-block">
-                        <div class="sig-title">التوقيع</div>
-                        <div style="height: 50px;"></div> <!-- مكان توقيع المتطوع -->
+                        <div class="sig-title">توقيع المتطوع</div>
+                        <div style="height: 45px;"></div> <!-- مكان توقيع المتطوع -->
                     </div>
                     
                     <div class="sig-block">
                         <div class="sig-title">رئيس قسم الموارد البشرية</div>
-                        <!-- توقيع رئيس الموارد البشرية المرسوم في الصورة الأصلية -->
                         <svg class="hr-signature-img" viewBox="0 0 200 80">
                             <path d="M 30 60 Q 60 10 90 50 T 150 20 T 180 70 M 50 40 L 160 30" stroke="#000" stroke-width="3" fill="none"/>
                         </svg>
@@ -231,9 +300,8 @@
                     <div class="sig-block">
                         <div class="sig-title">توقيع الرئيس التنفيذي</div>
                         <div class="exec-signature-block">
-                            <!-- توقيع وشعار الرئيس التنفيذي في الصورة الأصلية -->
                             <svg class="exec-sig-img" viewBox="0 0 200 80">
-                                <circle cx="40" cy="40" r="25" fill="#f57c00"/>
+                                <circle cx="40" cy="40" r="20" fill="#f57c00"/>
                                 <path d="M 20 65 Q 80 15 140 50 T 180 30" stroke="#000" stroke-width="3" fill="none"/>
                             </svg>
                         </div>
@@ -281,7 +349,7 @@
 
 <script>
     const users = {
-        "Riyad": "5454645",
+        "Riyad": "5454645", 
     };
 
     let contractsVault = [];
