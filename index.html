@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فريق شمس التطوعي - نظام إدارة وأرشيف العقود</title>
+    <title>فريق شمس التطوعي - نظام إدارة وأرشيف العقود (متزامن)</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -150,7 +150,7 @@
         <div class="auth-card">
             <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 100px; height: auto; max-height: 80px; object-fit: contain; margin-bottom: 10px;" onerror="this.style.display='none'">
             <h2>فريق شمس التطوعي</h2>
-            <p>أدخل بيانات الحساب أو اضغط دخول مباشر</p>
+            <p>أدخل بيانات الحساب السحابي الموحد</p>
             
             <form onsubmit="handleLogin(event)">
                 <div class="form-group" style="margin-bottom: 12px;">
@@ -160,7 +160,6 @@
                     <input type="password" id="login_pass" class="form-control" placeholder="كلمة المرور" required>
                 </div>
                 <button type="submit" class="btn-action btn-orange" style="width: 100%; justify-content: center; font-size: 15px; margin-bottom: 10px;"><i class="fas fa-lock-open"></i> تسجيل الدخول</button>
-                <button type="button" onclick="quickAdminLogin()" class="btn-action btn-navy" style="width: 100%; justify-content: center; font-size: 14px; background: #334155;"><i class="fas fa-bolt"></i> دخول سريع (مدير النظام الافتراضي)</button>
             </form>
         </div>
     </div>
@@ -227,7 +226,7 @@
                     </div>
 
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button onclick="saveAndArchiveContract()" class="btn-action btn-orange"><i class="fas fa-save"></i> حفظ العقد في الأرشيف</button>
+                        <button onclick="saveAndArchiveContract()" class="btn-action btn-orange"><i class="fas fa-save"></i> حفظ العقد في الأرشيف السحابي</button>
                         <button onclick="downloadContractHTML()" class="btn-action btn-green"><i class="fas fa-file-download"></i> تنزيل العقد (ملف)</button>
                         <button onclick="window.print()" class="btn-action btn-navy"><i class="fas fa-print"></i> طباعة العقد مباشر</button>
                     </div>
@@ -325,7 +324,7 @@
             <!-- Tab 3: Archive View -->
             <div id="archiveTab" style="display: none;">
                 <div class="card-box">
-                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-archive"></i> أرشيف العقود المعتمدة والمرفقة</h3>
+                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-archive"></i> أرشيف العقود المعتمدة والمرفقة (متزامن سحابياً)</h3>
                     <table>
                         <thead>
                             <tr>
@@ -346,7 +345,7 @@
             <!-- Tab 4: System Users Control -->
             <div id="usersTab" style="display: none;">
                 <div class="card-box">
-                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد للنظام</h3>
+                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد للنظام (يعمل على جميع الأجهزة)</h3>
                     <form onsubmit="addUser(event)">
                         <div class="form-grid">
                             <div class="form-group">
@@ -369,12 +368,12 @@
                                 </select>
                             </div>
                         </div>
-                        <button type="submit" class="btn-action btn-orange"><i class="fas fa-check"></i> حفظ المستخدم</button>
+                        <button type="submit" class="btn-action btn-orange"><i class="fas fa-check"></i> حفظ المستخدم سحابياً</button>
                     </form>
                 </div>
 
                 <div class="card-box">
-                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-users"></i> حسابات الدخول المسجلة</h3>
+                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-users"></i> حسابات الدخول المسجلة سحابياً</h3>
                     <table>
                         <thead>
                             <tr>
@@ -393,10 +392,10 @@
         </div>
     </div>
 
-    <!-- Firebase SDK Integration -->
+    <!-- Firebase SDK Integration & Cloud Sync Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
+        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAehKIHRrnIm-l6djL36mz5P7E_UED2PzE",
@@ -409,27 +408,56 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-    </script>
+        const db = getFirestore(app);
 
-    <script>
-        // Accounts Logic Initialization
-        let usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
-        if(usersList.length === 0) {
-            usersList = [{ id: 1, name: 'المدير العام', username: 'admin', password: '123456', role: 'مدير النظام' }];
-            localStorage.setItem('shams_users', JSON.stringify(usersList));
+        // Global lists for cloud sync
+        window.usersList = [];
+        window.contractsArchive = [];
+
+        // Fetch Data from Cloud on Startup
+        async function loadCloudData() {
+            try {
+                // Load Users
+                const usersSnap = await getDocs(collection(db, "users"));
+                window.usersList = [];
+                usersSnap.forEach((docSnap) => {
+                    window.usersList.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                // If no users exist in cloud yet, create default admin
+                if(window.usersList.length === 0) {
+                    await addDoc(collection(db, "users"), { name: 'المدير العام', username: 'admin', password: '123456', role: 'مدير النظام' });
+                    const res = await getDocs(collection(db, "users"));
+                    window.usersList = [];
+                    res.forEach(d => window.usersList.push({ id: d.id, ...d.data() }));
+                }
+
+                // Load Contracts
+                const contractsSnap = await getDocs(collection(db, "contracts"));
+                window.contractsArchive = [];
+                contractsSnap.forEach((docSnap) => {
+                    window.contractsArchive.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                renderUsers();
+                renderArchive();
+            } catch (err) {
+                console.error("Cloud Error: ", err);
+            }
         }
 
-        // Authentication Handler
-        function handleLogin(e) {
+        loadCloudData();
+
+        // Authentication Handler with Cloud Data
+        window.handleLogin = async function(e) {
             e.preventDefault();
-            // تحديث قائمة المستخدمين من الذاكرة لضمان قراءة الحسابات المضافة حديثاً
-            usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
-            
             const uInput = document.getElementById('login_user').value.trim();
             const pInput = document.getElementById('login_pass').value.trim();
 
-            const foundUser = usersList.find(u => u.username === uInput && u.password === pInput);
+            // Refresh from cloud before checking
+            await loadCloudData();
+
+            const foundUser = window.usersList.find(u => u.username === uInput && u.password === pInput);
 
             if(foundUser) {
                 document.getElementById('authSection').style.display = 'none';
@@ -439,16 +467,130 @@
             } else {
                 alert('خطأ: اسم المستخدم أو كلمة المرور غير صحيحة!');
             }
-        }
+        };
 
-        function quickAdminLogin() {
-            document.getElementById('authSection').style.display = 'none';
-            document.getElementById('appContent').style.display = 'block';
-            usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
-            renderUsers();
-            renderArchive();
-        }
+        // Add User to Cloud
+        window.addUser = async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('u_name').value;
+            const username = document.getElementById('u_username').value.trim();
+            const password = document.getElementById('u_password').value.trim();
+            const role = document.getElementById('u_role').value;
 
+            if(window.usersList.some(u => u.username === username)) {
+                alert('اسم المستخدم موجود بالفعل!');
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, "users"), { name, username, password, role });
+                alert('تمت إضافة المستخدم سحابياً بنجاح! يمكنه الآن الدخول من أي جهاز جوال أو كمبيوتر.');
+                document.getElementById('u_name').value = '';
+                document.getElementById('u_username').value = '';
+                document.getElementById('u_password').value = '';
+                await loadCloudData();
+            } catch(err) {
+                alert('حدث خطأ أثناء الحفظ بالسحابة');
+            }
+        };
+
+        // Delete User from Cloud
+        window.deleteUser = async function(docId) {
+            if(window.usersList.length <= 1) {
+                alert('لا يمكن حذف المستخدم الوحيد!');
+                return;
+            }
+            if(confirm('هل أنت متأكد من حذف هذا المستخدم نهائياً؟')) {
+                try {
+                    await deleteDoc(doc(db, "users", docId));
+                    await loadCloudData();
+                } catch(err) {
+                    alert('فشل الحذف');
+                }
+            }
+        };
+
+        // Save Contract to Cloud
+        window.saveAndArchiveContract = async function() {
+            const name = document.getElementById('in_name').value;
+            const id = document.getElementById('in_id').value;
+            if(!name || !id) { alert('يرجى كتابة الاسم الكامل ورقم الهوية أولاً'); return; }
+
+            const todayVal = document.getElementById('in_today').value || new Date().toISOString().split('T')[0];
+            const startDateVal = document.getElementById('in_startDate').value || todayVal;
+            const durationVal = parseInt(document.getElementById('in_duration').value);
+            
+            let startDate = new Date(startDateVal);
+            let endDate = new Date(startDate);
+            endDate.setMonth(endDate.getMonth() + durationVal);
+
+            const newContract = {
+                name: name,
+                nationalId: id,
+                dept: document.getElementById('in_dept').value || 'غير محدد',
+                startDate: startDate.toISOString().split('T')[0],
+                endDate: endDate.toISOString().split('T')[0],
+                type: 'عقد محرر بالنظام',
+                createdAt: Date.now()
+            };
+
+            try {
+                await addDoc(collection(db, "contracts"), newContract);
+                alert('تم حفظ العقد بنجاح في الأرشيف السحابي!');
+                await loadCloudData();
+                switchTab('archiveTab');
+            } catch(err) {
+                alert('فشل حفظ العقد بالسحابة');
+            }
+        };
+
+        // Upload External File to Cloud
+        window.handleFileUpload = async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('up_name').value;
+            const id = document.getElementById('up_id').value;
+            const dept = document.getElementById('up_dept').value;
+            const fileInput = document.getElementById('up_file');
+
+            if(fileInput.files.length === 0) return;
+            const fileName = fileInput.files[0].name;
+
+            const newContract = {
+                name: name,
+                nationalId: id,
+                dept: dept,
+                startDate: new Date().toISOString().split('T')[0],
+                endDate: 'مرفق خارجي',
+                type: 'مرفق خارجي (' + fileName + ')',
+                createdAt: Date.now()
+            };
+
+            try {
+                await addDoc(collection(db, "contracts"), newContract);
+                alert('تم إرفاق العقد سحابياً بنجاح!');
+                await loadCloudData();
+                switchTab('archiveTab');
+            } catch(err) {
+                alert('فشل الرفع');
+            }
+        };
+
+        // Delete Contract from Cloud
+        window.deleteContract = async function(docId) {
+            if(confirm('هل أنت متأكد من حذف هذا العقد من الأرشيف؟')) {
+                try {
+                    await deleteDoc(doc(db, "contracts", docId));
+                    await loadCloudData();
+                } catch(err) {
+                    alert('فشل الحذف');
+                }
+            }
+        };
+
+    </script>
+
+    <script>
+        // Navigation & UI Helper Functions
         function logoutSystem() {
             document.getElementById('login_user').value = '';
             document.getElementById('login_pass').value = '';
@@ -456,7 +598,6 @@
             document.getElementById('appContent').style.display = 'none';
         }
 
-        // Navigation Tabs Switcher
         function switchTab(tabId) {
             document.getElementById('createTab').style.display = 'none';
             document.getElementById('uploadTab').style.display = 'none';
@@ -476,7 +617,6 @@
             if(tabId === 'usersTab') document.getElementById('btn-users').classList.add('active');
         }
 
-        // Live Preview Functions
         function updateContractPreview() {
             const name = document.getElementById('in_name').value || '...................';
             const id = document.getElementById('in_id').value || '...................';
@@ -513,7 +653,6 @@
             document.getElementById('p_duration').innerText = durationVal + ' شهر';
         }
 
-        // Contract Download Feature
         function downloadContractHTML() {
             const name = document.getElementById('in_name').value || 'عقد_متطوع';
             const content = document.getElementById('contractPaper').outerHTML;
@@ -524,147 +663,37 @@
             a.click();
         }
 
-        // Upload External File Feature
-        function handleFileUpload(e) {
-            e.preventDefault();
-            const name = document.getElementById('up_name').value;
-            const id = document.getElementById('up_id').value;
-            const dept = document.getElementById('up_dept').value;
-            const fileInput = document.getElementById('up_file');
-
-            if(fileInput.files.length === 0) return;
-
-            const fileName = fileInput.files[0].name;
-
-            const newContract = {
-                id: Date.now(),
-                name: name,
-                nationalId: id,
-                dept: dept,
-                startDate: new Date().toISOString().split('T')[0],
-                endDate: 'مرفق خارجي',
-                type: 'مرفق خارجي (' + fileName + ')'
-            };
-
-            contractsArchive.push(newContract);
-            localStorage.setItem('shams_contracts', JSON.stringify(contractsArchive));
-            alert('تم إرفاق العقد بنجاح في الأرشيف!');
-            renderArchive();
-            switchTab('archiveTab');
-        }
-
-        // User Management System
-        function addUser(e) {
-            e.preventDefault();
-            const name = document.getElementById('u_name').value;
-            const username = document.getElementById('u_username').value.trim();
-            const password = document.getElementById('u_password').value.trim();
-            const role = document.getElementById('u_role').value;
-
-            usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
-
-            if(usersList.some(u => u.username === username)) {
-                alert('اسم المستخدم موجود بالفعل!');
-                return;
-            }
-
-            usersList.push({ id: Date.now(), name, username, password, role });
-            localStorage.setItem('shams_users', JSON.stringify(usersList));
-            alert('تمت إضافة المستخدم بنجاح!');
-            
-            document.getElementById('u_name').value = '';
-            document.getElementById('u_username').value = '';
-            document.getElementById('u_password').value = '';
-            renderUsers();
-        }
-
-        function deleteUser(id) {
-            usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
-            if(usersList.length <= 1) {
-                alert('لا يمكن حذف المستخدم الوحيد!');
-                return;
-            }
-            if(confirm('هل أنت متأكد من حذف هذا المستخدم؟')) {
-                usersList = usersList.filter(u => u.id !== id);
-                localStorage.setItem('shams_users', JSON.stringify(usersList));
-                renderUsers();
-            }
-        }
-
         function renderUsers() {
-            usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
             const tbody = document.getElementById('usersTableBody');
-            document.getElementById('usersCount').innerText = usersList.length;
+            document.getElementById('usersCount').innerText = window.usersList.length;
             tbody.innerHTML = '';
 
-            usersList.forEach(u => {
+            window.usersList.forEach(u => {
                 tbody.innerHTML += `
                     <tr>
                         <td><b>${u.name}</b></td>
                         <td><code>${u.username}</code></td>
                         <td><code>${u.password}</code></td>
                         <td><span class="badge badge-active">${u.role}</span></td>
-                        <td><button onclick="deleteUser(${u.id})" class="btn-action btn-danger" style="padding: 4px 10px; font-size: 12px;"><i class="fas fa-trash"></i> حذف</button></td>
+                        <td><button onclick="deleteUser('${u.id}')" class="btn-action btn-danger" style="padding: 4px 10px; font-size: 12px;"><i class="fas fa-trash"></i> حذف</button></td>
                     </tr>
                 `;
             });
         }
 
-        // Archive Functions
-        let contractsArchive = JSON.parse(localStorage.getItem('shams_contracts') || '[]');
-
-        function saveAndArchiveContract() {
-            const name = document.getElementById('in_name').value;
-            const id = document.getElementById('in_id').value;
-            if(!name || !id) { alert('يرجى كتابة الاسم الكامل ورقم الهوية أولاً'); return; }
-
-            const todayVal = document.getElementById('in_today').value || new Date().toISOString().split('T')[0];
-            const startDateVal = document.getElementById('in_startDate').value || todayVal;
-            const durationVal = parseInt(document.getElementById('in_duration').value);
-            
-            let startDate = new Date(startDateVal);
-            let endDate = new Date(startDate);
-            endDate.setMonth(endDate.getMonth() + durationVal);
-
-            const newContract = {
-                id: Date.now(),
-                name: name,
-                nationalId: id,
-                dept: document.getElementById('in_dept').value || 'غير محدد',
-                startDate: startDate.toISOString().split('T')[0],
-                endDate: endDate.toISOString().split('T')[0],
-                type: 'عقد محرر بالنظام'
-            };
-
-            contractsArchive.push(newContract);
-            localStorage.setItem('shams_contracts', JSON.stringify(contractsArchive));
-            alert('تم حفظ العقد بنجاح في الأرشيف!');
-            renderArchive();
-            switchTab('archiveTab');
-        }
-
-        function deleteContract(id) {
-            if(confirm('هل أنت متأكد من حذف هذا العقد من الأرشيف؟')) {
-                contractsArchive = contractsArchive.filter(c => c.id !== id);
-                localStorage.setItem('shams_contracts', JSON.stringify(contractsArchive));
-                renderArchive();
-            }
-        }
-
         function renderArchive() {
-            contractsArchive = JSON.parse(localStorage.getItem('shams_contracts') || '[]');
             const tbody = document.getElementById('archiveTableBody');
-            document.getElementById('contractCount').innerText = contractsArchive.length;
+            document.getElementById('contractCount').innerText = window.contractsArchive.length;
             tbody.innerHTML = '';
 
-            if(contractsArchive.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #777; padding: 20px;">لا توجد عقود محفوظة في الأرشيف حالياً.</td></tr>`;
+            if(window.contractsArchive.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #777; padding: 20px;">لا توجد عقود محفوظة في الأرشيف السحابي حالياً.</td></tr>`;
                 return;
             }
 
             const today = new Date();
 
-            contractsArchive.forEach(c => {
+            window.contractsArchive.forEach(c => {
                 let statusBadge = '';
                 if(c.endDate === 'مرفق خارجي') {
                     statusBadge = `<span class="badge badge-active">نشط / خارجي</span>`;
@@ -691,7 +720,7 @@
                         <td>${c.type}</td>
                         <td>${statusBadge}</td>
                         <td>
-                            <button onclick="deleteContract(${c.id})" class="btn-action btn-danger" style="padding: 4px 10px; font-size: 12px;"><i class="fas fa-trash"></i> حذف</button>
+                            <button onclick="deleteContract('${c.id}')" class="btn-action btn-danger" style="padding: 4px 10px; font-size: 12px;"><i class="fas fa-trash"></i> حذف</button>
                         </td>
                     </tr>
                 `;
