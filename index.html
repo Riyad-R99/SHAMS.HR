@@ -96,38 +96,38 @@
         .form-control { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; outline: none; }
         .form-control:focus { border-color: var(--primary-orange); }
 
-        /* نموذج العقد بمقاسات مضغوطة متوافقة تماماً مع صفحة A4 */
+        /* نموذج العقد بمقاسات مثالية تمنع ظهور صفحة ثانية فارغة */
         .contract-paper {
             background: white; 
             width: 794px; 
-            min-height: 1123px;
-            padding: 40px 50px; 
+            min-height: 1120px;
+            padding: 25px 40px; 
             margin: 0 auto;
             border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05); 
             position: relative; 
             box-sizing: border-box;
         }
-        .contract-title { text-align: center; font-size: 18px; font-weight: 900; color: #000; margin: 10px 0 15px 0; }
-        .contract-row { font-size: 12px; line-height: 1.6; font-weight: 600; color: #111; margin-bottom: 4px; }
-        .fill-val { border-bottom: 1px dashed #555; padding: 0 6px; font-weight: 800; color: #000; display: inline-block; }
-        .section-h { font-size: 13px; font-weight: 900; color: #000; margin: 12px 0 4px 0; border-right: 3px solid var(--primary-orange); padding-right: 6px; }
+        .contract-title { text-align: center; font-size: 16px; font-weight: 900; color: #000; margin: 5px 0 10px 0; }
+        .contract-row { font-size: 11.5px; line-height: 1.45; font-weight: 600; color: #111; margin-bottom: 2px; }
+        .fill-val { border-bottom: 1px dashed #555; padding: 0 5px; font-weight: 800; color: #000; display: inline-block; }
+        .section-h { font-size: 12px; font-weight: 900; color: #000; margin: 8px 0 2px 0; border-right: 3px solid var(--primary-orange); padding-right: 6px; }
         .contract-ul { list-style: none; padding-right: 0; }
-        .contract-ul li { font-size: 11.5px; line-height: 1.5; color: #222; font-weight: 500; margin-bottom: 2px; }
+        .contract-ul li { font-size: 11px; line-height: 1.35; color: #222; font-weight: 500; margin-bottom: 1px; }
 
         /* التوقيعات */
         .sig-grid { 
             display: flex; 
             justify-content: space-between; 
             align-items: flex-end; 
-            margin-top: 30px; 
-            padding-top: 15px; 
+            margin-top: 15px; 
+            padding-top: 10px; 
             border-top: 1px solid #e2e8f0; 
         }
         .sig-box { text-align: center; flex: 1; padding: 0 5px; }
-        .sig-box .title { color: #000; font-size: 11px; font-weight: 800; margin-bottom: 5px; }
+        .sig-box .title { color: #000; font-size: 10.5px; font-weight: 800; margin-bottom: 3px; }
         .sig-line { border-bottom: 1px dashed #777; width: 85%; margin: 0 auto; }
-        .sig-img { height: 45px; object-fit: contain; display: block; margin: 0 auto 2px auto; }
+        .sig-img { height: 38px; object-fit: contain; display: block; margin: 0 auto 2px auto; }
 
         .btn-action { padding: 10px 18px; border-radius: 6px; font-weight: 800; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
         .btn-orange { background: var(--primary-orange); color: white; }
@@ -234,7 +234,7 @@
 
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button onclick="saveAndArchiveContract()" class="btn-action btn-orange"><i class="fas fa-save"></i> حفظ العقد في الأرشيف السحابي</button>
-                        <button onclick="downloadContractPDF()" class="btn-action btn-green"><i class="fas fa-file-pdf"></i> تنزيل العقد (PDF)</button>
+                        <button onclick="downloadContractPDF()" class="btn-action btn-green"><i class="fas fa-file-pdf"></i> تنزيل العقد (PDF في صفحة واحدة)</button>
                         <button onclick="window.print()" class="btn-action btn-navy"><i class="fas fa-print"></i> طباعة مباشرة</button>
                     </div>
                 </div>
@@ -243,7 +243,7 @@
                 <div style="overflow-x: auto; width: 100%;">
                     <div class="contract-paper" id="contractPaper">
                         <div style="text-align: right;">
-                            <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 100px; height: auto; object-fit: contain;" onerror="this.style.display='none'">
+                            <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 85px; height: auto; object-fit: contain;" onerror="this.style.display='none'">
                         </div>
 
                         <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
@@ -257,7 +257,7 @@
                         <div class="contract-row">القسم / الإدارة: ( <span class="fill-val" id="p_dept">...................</span> )</div>
 
                         <div class="section-h">أولاً : موضوع العقد</div>
-                        <p style="font-size:11.5px; line-height: 1.5; font-weight: 500;">انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
+                        <p style="font-size:11px; line-height: 1.4; font-weight: 500;">انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
 
                         <div class="section-h">ثانياً : واجبات المتطوع</div>
                         <ul class="contract-ul">
@@ -281,12 +281,12 @@
                         <div class="section-h">رابعاً : مدة العقد و انهاؤه</div>
                         <div class="contract-row">مدة العقد: ( <span class="fill-val" id="p_duration">1 شهر</span> )</div>
                         <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">..../../....</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">..../../....</span> )</div>
-                        <p style="font-size:11.5px; line-height: 1.5; font-weight: 500; margin-top: 4px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
+                        <p style="font-size:11px; line-height: 1.4; font-weight: 500; margin-top: 2px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
 
                         <div class="sig-grid">
                             <div class="sig-box">
                                 <div class="title">التوقيع</div>
-                                <div class="sig-line" style="margin-top: 40px;"></div>
+                                <div class="sig-line" style="margin-top: 35px;"></div>
                             </div>
                             <div class="sig-box">
                                 <div class="title">رئيس قسم الموارد البشرية</div>
@@ -322,11 +322,19 @@
                                 <input type="text" id="up_dept" class="form-control" placeholder="اسم القسم" required>
                             </div>
                             <div class="form-group">
+                                <label>تاريخ بداية العقد الخارجي</label>
+                                <input type="date" id="up_startDate" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>تاريخ انتهاء العقد الخارجي</label>
+                                <input type="date" id="up_endDate" class="form-control" required>
+                            </div>
+                            <div class="form-group" style="grid-column: span 2;">
                                 <label>اختيار ملف العقد (PDF / صورة)</label>
                                 <input type="file" id="up_file" class="form-control" accept=".pdf,image/*" required>
                             </div>
                         </div>
-                        <button type="submit" class="btn-action btn-orange"><i class="fas fa-upload"></i> رفع وحفظ العقد بالأرشيف</button>
+                        <button type="submit" class="btn-action btn-orange"><i class="fas fa-upload"></i> رفع وحفظ العقد بالأرشيف مع التنبيهات</button>
                     </form>
                 </div>
             </div>
@@ -341,7 +349,8 @@
                                 <th>اسم المتطوع</th>
                                 <th>الهوية</th>
                                 <th>القسم</th>
-                                <th>تاريخ العقد</th>
+                                <th>تاريخ البداية</th>
+                                <th>تاريخ النهاية</th>
                                 <th>نوع العقد</th>
                                 <th>الحالة والتنبيه</th>
                                 <th>إجراء</th>
@@ -581,6 +590,8 @@
             const name = document.getElementById('up_name').value;
             const id = document.getElementById('up_id').value;
             const dept = document.getElementById('up_dept').value;
+            const startDate = document.getElementById('up_startDate').value;
+            const endDate = document.getElementById('up_endDate').value;
             const fileInput = document.getElementById('up_file');
 
             if(fileInput.files.length === 0) return;
@@ -590,15 +601,15 @@
                 name: name,
                 nationalId: id,
                 dept: dept,
-                startDate: new Date().toISOString().split('T')[0],
-                endDate: 'مرفق خارجي',
+                startDate: startDate,
+                endDate: endDate,
                 type: 'مرفق خارجي (' + fileName + ')',
                 createdAt: Date.now()
             };
 
             try {
                 await addDoc(collection(db, "contracts"), newContract);
-                alert('تم إرفاق العقد سحابياً بنجاح!');
+                alert('تم إرفاق العقد الخارجي وحفظ تواريخه وحالته سحابياً بنجاح!');
                 await loadCloudData();
                 switchTab('archiveTab');
             } catch(err) {
@@ -689,13 +700,12 @@
             document.getElementById('p_duration').innerText = durationVal + ' شهر';
         }
 
-        // دالة تنزيل العقد بصيغة PDF بشكل مثالي ومتكامل بدون أي فراغات بيضاء
         function downloadContractPDF() {
             const name = document.getElementById('in_name').value || 'عقد_متطوع';
             const element = document.getElementById('contractPaper');
             
             const opt = {
-                margin:       [5, 5, 5, 5],
+                margin:       [2, 2, 2, 2],
                 filename:     `عقد_${name}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
@@ -733,28 +743,29 @@
             tbody.innerHTML = '';
 
             if(window.contractsArchive.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #777; padding: 20px;">لا توجد عقود محفوظة في الأرشيف السحابي حالياً.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #777; padding: 20px;">لا توجد عقود محفوظة في الأرشيف السحابي حالياً.</td></tr>`;
                 return;
             }
 
             const today = new Date();
+            today.setHours(0, 0, 0, 0);
 
             window.contractsArchive.forEach(c => {
                 let statusBadge = '';
-                if(c.endDate === 'مرفق خارجي') {
-                    statusBadge = `<span class="badge badge-active">نشط / خارجي</span>`;
-                } else {
-                    let endD = new Date(c.endDate);
-                    let diffTime = endD - today;
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                let endD = new Date(c.endDate);
+                endD.setHours(0, 0, 0, 0);
+                
+                let diffTime = endD - today;
+                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                    if(diffDays < 0) {
-                        statusBadge = `<span class="badge badge-expired">منتهي</span>`;
-                    } else if(diffDays <= 7) {
-                        statusBadge = `<span class="badge badge-warning">ينتهي خلال ${diffDays} أيام</span>`;
-                    } else {
-                        statusBadge = `<span class="badge badge-active">ساري (باقي ${diffDays} يوم)</span>`;
-                    }
+                if(isNaN(diffDays)) {
+                    statusBadge = `<span class="badge badge-active">نشط</span>`;
+                } else if(diffDays < 0) {
+                    statusBadge = `<span class="badge badge-expired">منتهي</span>`;
+                } else if(diffDays <= 7) {
+                    statusBadge = `<span class="badge badge-warning">ينتهي خلال ${diffDays} أيام</span>`;
+                } else {
+                    statusBadge = `<span class="badge badge-active">ساري (باقي ${diffDays} يوم)</span>`;
                 }
 
                 tbody.innerHTML += `
@@ -762,7 +773,8 @@
                         <td><b>${c.name}</b></td>
                         <td>${c.nationalId}</td>
                         <td>${c.dept}</td>
-                        <td>${c.startDate}</td>
+                        <td>${c.startDate || 'غير محدد'}</td>
+                        <td>${c.endDate || 'غير محدد'}</td>
                         <td>${c.type}</td>
                         <td>${statusBadge}</td>
                         <td>
