@@ -24,37 +24,89 @@
         .btn-edit:hover { background: #138496; }
         .hidden { display: none; }
         
-        /* حاوية العقد المعتمدة على الصورة الأصلية */
-        .contract-wrapper {
-            position: relative;
+        /* ورقة العقد المصممة بنفس الهيكل الدقيق للصورة */
+        .contract-paper {
+            background: white;
             width: 800px;
-            height: 1130px;
+            padding: 50px 60px;
             margin: 0 auto;
-            background: url('https://raw.githubusercontent.com/Riyad-R99/SHAMS.HR/main/WhatsApp%20Image%202026-09-04%20at%208.47.49%20PM.jpeg') no-repeat center center;
-            background-size: 100% 100%;
-            font-family: 'Segoe UI', Tahoma, sans-serif;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            box-sizing: border-box;
+            position: relative;
             color: #000;
-            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            line-height: 1.8;
+            font-size: 15px;
         }
 
-        /* الطبقات النصية المحددة بدقة فوق الصورة */
-        .field {
-            position: absolute;
+        .header-logo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .sun-logo-top {
+            width: 180px;
+        }
+
+        .contract-title {
+            text-align: center;
+            font-size: 22px;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 25px;
+        }
+
+        .section-header {
+            font-size: 17px;
+            font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        .fill-text {
+            font-weight: bold;
+            color: #000;
+            text-decoration: underline;
+            padding: 0 5px;
+        }
+
+        ol { margin: 5px 0 15px 0; padding-right: 20px; }
+        ol li { margin-bottom: 4px; }
+
+        .footer-signatures {
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            text-align: center;
+        }
+
+        .sig-block {
+            flex: 1;
+        }
+
+        .sig-title {
             font-weight: bold;
             font-size: 14px;
-            color: #000;
-            white-space: nowrap;
+            margin-bottom: 15px;
         }
 
-        /* تحديد أماكن إدراج النصوص على صورة العقد */
-        #posAgreeDate { top: 145px; right: 540px; }
-        #posName      { top: 203px; right: 620px; }
-        #posId        { top: 228px; right: 590px; }
-        #posPhone     { top: 252px; right: 590px; }
-        #posDept      { top: 277px; right: 570px; }
-        #posDuration  { top: 760px; right: 535px; }
-        #posStart     { top: 785px; right: 510px; }
-        #posEnd       { top: 785px; right: 685px; }
+        /* توقيع رئيس قسم الموارد البشرية */
+        .hr-signature-img {
+            height: 60px;
+        }
+
+        /* توقيع الرئيس التنفيذي مع الشعار */
+        .exec-signature-block {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .exec-sig-img {
+            height: 55px;
+        }
 
         /* جدول خزينة العقود */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
@@ -68,7 +120,7 @@
         @media print {
             body { background: white; padding: 0; }
             .no-print { display: none !important; }
-            .contract-wrapper { box-shadow: none; margin: 0; width: 100%; height: 100vh; }
+            .contract-paper { box-shadow: none; width: 100%; padding: 20px; }
         }
     </style>
 </head>
@@ -107,29 +159,87 @@
                 <div><label>تاريخ بداية العقد:</label><input type="date" id="startDate"></div>
                 <div class="full-width"><label>مدة العقد (بالأشهر):</label><input type="number" id="durationMonths" value="3"></div>
                 <div class="full-width">
-                    <button onclick="generateContract()">توليد العقد المطابق للصورة</button>
+                    <button onclick="generateContract()">توليد العقد المكتمل</button>
                 </div>
             </div>
         </div>
 
-        <!-- 3. عرض العقد فوق الصورة الأصلية -->
+        <!-- 3. عرض العقد الكامل مع التواقيع وتعديل البيانات -->
         <div id="contractPreviewSection" class="hidden">
             <div class="card no-print" style="display: flex; gap: 10px; justify-content: center;">
-                <button onclick="showSection('create')" class="btn-edit" style="width: auto;">✏️ تعديل البيانات (عودة)</button>
+                <button onclick="showSection('create')" class="btn-edit" style="width: auto;">✏️ تعديل البيانات / عودة</button>
                 <button onclick="window.print()" style="width: auto;">🖨️ طباعة العقد / حفظ كـ PDF</button>
-                <button onclick="showSection('upload')" class="btn-secondary" style="width: auto;">📤 رفع العقد بعد التوقيع</button>
+                <button onclick="showSection('upload')" class="btn-secondary" style="width: auto;">📤 رفع العقد الموقّع</button>
             </div>
 
-            <!-- الورقة المطبوعة والمطابقة للصورة -->
-            <div class="contract-wrapper" id="contractPaper">
-                <div id="posAgreeDate" class="field"></div>
-                <div id="posName" class="field"></div>
-                <div id="posId" class="field"></div>
-                <div id="posPhone" class="field"></div>
-                <div id="posDept" class="field"></div>
-                <div id="posDuration" class="field"></div>
-                <div id="posStart" class="field"></div>
-                <div id="posEnd" class="field"></div>
+            <div class="contract-paper" id="contractPaper">
+                
+                <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
+
+                <p>
+                    تم الاتفاق في تاريخ: ( <span id="outAgreeDate" class="fill-text"></span> ) بين كل من<br>
+                    <strong>الطرف الأول :</strong> إدارة فريق (شمس) التطوعيّ<br>
+                    <strong>الطرف الثاني :</strong> المتطوع/ة ( <span id="outName" class="fill-text"></span> )<br>
+                    <strong>رقم الهوية ( <span id="outId" class="fill-text"></span> )</strong><br>
+                    <strong>رقم الجوال ( <span id="outPhone" class="fill-text"></span> )</strong><br>
+                    <strong>القسم ( <span id="outDept" class="fill-text"></span> )</strong>
+                </p>
+
+                <div class="section-header">أولاً : موضوع العقد</div>
+                <p>انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
+
+                <div class="section-header">ثانياً : واجبات المتطوع</div>
+                <ol>
+                    <li>تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
+                    <li>الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
+                    <li>الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
+                    <li>الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
+                    <li>عدم طلب الإعفاء خلال الشهر الأول.</li>
+                    <li>عند الرغبة بالانسحاب يجب الإبلاغ رسمياً.</li>
+                </ol>
+
+                <div class="section-header">ثالثاً : حقوق الإدارة</div>
+                <ol>
+                    <li>التعامل مع المتطوع باحترام وتقدير.</li>
+                    <li>منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
+                    <li>عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
+                    <li>توضيح أسباب إنهاء العقد عند حدوثه.</li>
+                    <li>حفظ بيانات وسجلات المتطوع.</li>
+                </ol>
+
+                <div class="section-header">رابعاً : مدة العقد و إنهائه</div>
+                <p>
+                    <strong>مدة العقد:</strong> ( <span id="outDuration" class="fill-text"></span> شهر )<br>
+                    تبدأ من تاريخ: ( <span id="outStart" class="fill-text"></span> ) وتنتهي في: ( <span id="outEnd" class="fill-text"></span> )<br>
+                    يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.
+                </p>
+
+                <div class="footer-signatures">
+                    <div class="sig-block">
+                        <div class="sig-title">التوقيع</div>
+                        <div style="height: 50px;"></div> <!-- مكان توقيع المتطوع -->
+                    </div>
+                    
+                    <div class="sig-block">
+                        <div class="sig-title">رئيس قسم الموارد البشرية</div>
+                        <!-- توقيع رئيس الموارد البشرية المرسوم في الصورة الأصلية -->
+                        <svg class="hr-signature-img" viewBox="0 0 200 80">
+                            <path d="M 30 60 Q 60 10 90 50 T 150 20 T 180 70 M 50 40 L 160 30" stroke="#000" stroke-width="3" fill="none"/>
+                        </svg>
+                    </div>
+
+                    <div class="sig-block">
+                        <div class="sig-title">توقيع الرئيس التنفيذي</div>
+                        <div class="exec-signature-block">
+                            <!-- توقيع وشعار الرئيس التنفيذي في الصورة الأصلية -->
+                            <svg class="exec-sig-img" viewBox="0 0 200 80">
+                                <circle cx="40" cy="40" r="25" fill="#f57c00"/>
+                                <path d="M 20 65 Q 80 15 140 50 T 180 30" stroke="#000" stroke-width="3" fill="none"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -215,7 +325,6 @@
             return;
         }
 
-        // حساب تاريخ الانتهاء
         let startDateObj = new Date(start);
         startDateObj.setMonth(startDateObj.getMonth() + duration);
         let endDateStr = startDateObj.toISOString().split('T')[0];
@@ -226,16 +335,15 @@
             return `${parts[2]} / ${parts[1]} / ${parts[0]}`;
         }
 
-        document.getElementById('posAgreeDate').innerText = formatDate(agreeDate || start);
-        document.getElementById('posName').innerText = name;
-        document.getElementById('posId').innerText = id;
-        document.getElementById('posPhone').innerText = phone;
-        document.getElementById('posDept').innerText = dept;
-        document.getElementById('posDuration').innerText = duration;
-        document.getElementById('posStart').innerText = formatDate(start);
-        document.getElementById('posEnd').innerText = formatDate(endDateStr);
+        document.getElementById('outAgreeDate').innerText = formatDate(agreeDate || start);
+        document.getElementById('outName').innerText = name;
+        document.getElementById('outId').innerText = id;
+        document.getElementById('outPhone').innerText = phone;
+        document.getElementById('outDept').innerText = dept;
+        document.getElementById('outDuration').innerText = duration;
+        document.getElementById('outStart').innerText = formatDate(start);
+        document.getElementById('outEnd').innerText = formatDate(endDateStr);
 
-        // تجهيز بيانات شاشة الرفع
         document.getElementById('upName').value = name;
         document.getElementById('upId').value = id;
         document.getElementById('upEndDate').value = endDateStr;
