@@ -98,7 +98,7 @@
         .contract-ul { list-style: none; padding-right: 0; }
         .contract-ul li { font-size: 14px; line-height: 1.8; color: #222; font-weight: 500; }
 
-        /* Signatures Layout matched to authentic original document */
+        /* Signatures Layout */
         .sig-grid { 
             display: flex; 
             justify-content: space-around; 
@@ -149,10 +149,7 @@
     <!-- Lock Screen / Login Overlay -->
     <div class="auth-overlay" id="authSection">
         <div class="auth-card">
-            <svg width="120" height="60" viewBox="0 0 320 150" fill="none">
-                <path d="M110,15 C118,38 135,45 150,38 C142,60 165,68 180,60 C165,75 180,90 195,90 C172,102 184,120 192,135 C168,128 158,146 150,158 C138,135 124,150 112,165 C105,150 93,132 70,140 C78,124 88,105 65,95 C80,95 95,80 80,65 C95,72 118,65 110,38 Z" fill="#f37021"/>
-                <circle cx="120" cy="98" r="42" fill="#fbb03b"/>
-            </svg>
+            <img src="https://your-website.com/contract.jpg" alt="شعار فريق شمس" style="width: 100px; height: auto; max-height: 80px; object-fit: contain; margin-bottom: 10px;">
             <h2>فريق شمس التطوعي</h2>
             <p>يرجى إدخال اسم المستخدم وكلمة المرور للوصول للنظام</p>
             
@@ -235,14 +232,10 @@
                 <!-- Contract Printable View -->
                 <div class="contract-paper" id="contractPaper">
                     <div style="text-align: right;">
-                        <svg width="180" height="80" viewBox="0 0 320 150" fill="none">
-                            <path d="M110,15 C118,38 135,45 150,38 C142,60 165,68 180,60 C165,75 180,90 195,90 C172,102 184,120 192,135 C168,128 158,146 150,158 C138,135 124,150 112,165 C105,150 93,132 70,140 C78,124 88,105 65,95 C80,95 95,80 80,65 C95,72 118,65 110,38 Z" fill="#f37021"/>
-                            <circle cx="120" cy="98" r="42" fill="#fbb03b"/>
-                            <text x="120" y="98" font-family="'Tajawal', sans-serif" font-weight="900" font-size="20" fill="#000a30" text-anchor="middle">فريق شمس التطوعي</text>
-                        </svg>
+                        <img src="https://your-website.com/contract.jpg" alt="شعار فريق شمس" style="width: 140px; height: auto; object-fit: contain;">
                     </div>
 
-                    <div class="contract-title">عقد اتفاقية انضمام لادارة "شمس" التطوعي</div>
+                    <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
 
                     <div class="contract-row">تم الاتفاق في تاريخ: ( <span class="fill-val" id="p_today">2026/09/04</span> ) بين كل من:</div>
                     <div class="contract-row">الطرف الأول : إدارة فريق (شمس) التطوّعي</div>
@@ -267,15 +260,13 @@
                     <div class="contract-row">تاريخ الانضمام: ( <span class="fill-val" id="p_startDate">2026/09/04</span> )</div>
                     <div class="contract-row">تاريخ الانتهاء التلقائي: ( <span class="fill-val" id="p_endDate">2026/10/04</span> )</div>
 
-                    <!-- Signatures Section Exactly Matched to Original Document Image -->
+                    <!-- Signatures Section -->
                     <div class="sig-grid">
-                        <!-- 1. Volunteer Signature (Right) -->
                         <div class="sig-box">
                             <div class="title">التوقيع</div>
                             <div class="sub-text">(توقيع المتطوع)</div>
                         </div>
 
-                        <!-- 2. HR Manager Signature (Middle) -->
                         <div class="sig-box">
                             <div class="title">رئيس قسم الموارد البشرية</div>
                             <svg width="150" height="70" viewBox="0 0 150 70" fill="none">
@@ -284,15 +275,9 @@
                             </svg>
                         </div>
 
-                        <!-- 3. CEO Signature (Left) -->
                         <div class="sig-box">
                             <div class="title">توقيع الرئيس التنفيذي</div>
                             <svg width="150" height="70" viewBox="0 0 160 70" fill="none">
-                                <!-- Logo and Signature Combo as shown on the left bottom of original doc -->
-                                <g transform="scale(0.35) translate(80, 20)">
-                                    <path d="M110,15 C118,38 135,45 150,38 C142,60 165,68 180,60 C165,75 180,90 195,90 C172,102 184,120 192,135 C168,128 158,146 150,158 C138,135 124,150 112,165 C105,150 93,132 70,140 C78,124 88,105 65,95 C80,95 95,80 80,65 C95,72 118,65 110,38 Z" fill="#f37021"/>
-                                    <circle cx="120" cy="98" r="42" fill="#fbb03b"/>
-                                </g>
                                 <path d="M 10 58 C 40 55, 80 50, 150 48" stroke="#111827" stroke-width="2.5" stroke-linecap="round"/>
                                 <path d="M 30 52 C 50 35, 90 40, 130 46" stroke="#111827" stroke-width="1.8" stroke-linecap="round"/>
                             </svg>
@@ -433,6 +418,26 @@
             document.getElementById('appContent').style.display = 'none';
         }
 
+        // Navigation Tabs Switcher
+        function switchTab(tabId) {
+            document.getElementById('createTab').style.display = 'none';
+            document.getElementById('uploadTab').style.display = 'none';
+            document.getElementById('archiveTab').style.display = 'none';
+            document.getElementById('usersTab').style.display = 'none';
+
+            document.getElementById('btn-create').classList.remove('active');
+            document.getElementById('btn-upload').classList.remove('active');
+            document.getElementById('btn-archive').classList.remove('active');
+            document.getElementById('btn-users').classList.remove('active');
+
+            document.getElementById(tabId).style.display = 'block';
+            
+            if(tabId === 'createTab') document.getElementById('btn-create').classList.add('active');
+            if(tabId === 'uploadTab') document.getElementById('btn-upload').classList.add('active');
+            if(tabId === 'archiveTab') document.getElementById('btn-archive').classList.add('active');
+            if(tabId === 'usersTab') document.getElementById('btn-users').classList.add('active');
+        }
+
         // Live Preview Functions
         function updateContractPreview() {
             const name = document.getElementById('in_name').value || '...................';
@@ -526,7 +531,7 @@
                 alert('لا يمكن حذف المستخدم الوحيد!');
                 return;
             }
-            if(confirm('هل أنت تأكد من حذف هذا المستخدم؟')) {
+            if(confirm('هل أنت متأكد من حذف هذا المستخدم؟')) {
                 usersList = usersList.filter(u => u.id !== id);
                 localStorage.setItem('shams_users', JSON.stringify(usersList));
                 renderUsers();
@@ -583,6 +588,14 @@
             switchTab('archiveTab');
         }
 
+        function deleteContract(id) {
+            if(confirm('هل أنت متأكد من حذف هذا العقد من الأرشيف؟')) {
+                contractsArchive = contractsArchive.filter(c => c.id !== id);
+                localStorage.setItem('shams_contracts', JSON.stringify(contractsArchive));
+                renderArchive();
+            }
+        }
+
         function renderArchive() {
             const tbody = document.getElementById('archiveTableBody');
             document.getElementById('contractCount').innerText = contractsArchive.length;
@@ -607,25 +620,12 @@
                         <td>${c.nationalId}</td>
                         <td>${c.dept}</td>
                         <td>${c.startDate}</td>
-                        <td><small>${c.type || 'عقد محرر'}</small></td>
+                        <td>${c.type}</td>
                         <td>${badge}</td>
-                        <td><button onclick="window.print()" class="btn-action btn-navy" style="padding:4px 10px; font-size:12px;"><i class="fas fa-print"></i> عرض/طباعة</button></td>
+                        <td><button onclick="deleteContract(${c.id})" class="btn-action btn-danger" style="padding: 4px 10px; font-size: 12px;"><i class="fas fa-trash"></i> حذف</button></td>
                     </tr>
                 `;
             });
-        }
-
-        // Navigation Switcher
-        function switchTab(tabId) {
-            document.getElementById('createTab').style.display = tabId === 'createTab' ? 'block' : 'none';
-            document.getElementById('uploadTab').style.display = tabId === 'uploadTab' ? 'block' : 'none';
-            document.getElementById('archiveTab').style.display = tabId === 'archiveTab' ? 'block' : 'none';
-            document.getElementById('usersTab').style.display = tabId === 'usersTab' ? 'block' : 'none';
-
-            document.getElementById('btn-create').classList.toggle('active', tabId === 'createTab');
-            document.getElementById('btn-upload').classList.toggle('active', tabId === 'uploadTab');
-            document.getElementById('btn-archive').classList.toggle('active', tabId === 'archiveTab');
-            document.getElementById('btn-users').classList.toggle('active', tabId === 'usersTab');
         }
     </script>
 </body>
