@@ -98,7 +98,7 @@
         .contract-ul { list-style: none; padding-right: 0; }
         .contract-ul li { font-size: 14px; line-height: 1.8; color: #222; font-weight: 500; }
 
-        /* Signatures Layout - Clean manual signature spaces */
+        /* Signatures Layout */
         .sig-grid { 
             display: flex; 
             justify-content: space-between; 
@@ -150,7 +150,7 @@
         <div class="auth-card">
             <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 100px; height: auto; max-height: 80px; object-fit: contain; margin-bottom: 10px;" onerror="this.style.display='none'">
             <h2>فريق شمس التطوعي</h2>
-            <p>يرجى إدخال اسم المستخدم وكلمة المرور للوصول للنظام</p>
+            <p>أدخل بيانات الحساب أو اضغط دخول مباشر</p>
             
             <form onsubmit="handleLogin(event)">
                 <div class="form-group" style="margin-bottom: 12px;">
@@ -159,7 +159,8 @@
                 <div class="form-group" style="margin-bottom: 20px;">
                     <input type="password" id="login_pass" class="form-control" placeholder="كلمة المرور" required>
                 </div>
-                <button type="submit" class="btn-action btn-orange" style="width: 100%; justify-content: center; font-size: 15px;"><i class="fas fa-lock-open"></i> دخول النظام</button>
+                <button type="submit" class="btn-action btn-orange" style="width: 100%; justify-content: center; font-size: 15px; margin-bottom: 10px;"><i class="fas fa-lock-open"></i> تسجيل الدخول</button>
+                <button type="button" onclick="quickAdminLogin()" class="btn-action btn-navy" style="width: 100%; justify-content: center; font-size: 14px; background: #334155;"><i class="fas fa-bolt"></i> دخول سريع (مدير النظام الافتراضي)</button>
             </form>
         </div>
     </div>
@@ -275,7 +276,7 @@
                     <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">..../../....</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">..../../....</span> )</div>
                     <p style="font-size:14px; line-height: 1.8; margin-top: 5px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
 
-                    <!-- Signatures Section - Clean spaces for manual signing -->
+                    <!-- Signatures Section -->
                     <div class="sig-grid">
                         <div class="sig-box">
                             <div class="title">التوقيع</div>
@@ -422,6 +423,9 @@
         // Authentication Handler
         function handleLogin(e) {
             e.preventDefault();
+            // تحديث قائمة المستخدمين من الذاكرة لضمان قراءة الحسابات المضافة حديثاً
+            usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
+            
             const uInput = document.getElementById('login_user').value.trim();
             const pInput = document.getElementById('login_pass').value.trim();
 
@@ -435,6 +439,14 @@
             } else {
                 alert('خطأ: اسم المستخدم أو كلمة المرور غير صحيحة!');
             }
+        }
+
+        function quickAdminLogin() {
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('appContent').style.display = 'block';
+            usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
+            renderUsers();
+            renderArchive();
         }
 
         function logoutSystem() {
@@ -549,6 +561,8 @@
             const password = document.getElementById('u_password').value.trim();
             const role = document.getElementById('u_role').value;
 
+            usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
+
             if(usersList.some(u => u.username === username)) {
                 alert('اسم المستخدم موجود بالفعل!');
                 return;
@@ -565,6 +579,7 @@
         }
 
         function deleteUser(id) {
+            usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
             if(usersList.length <= 1) {
                 alert('لا يمكن حذف المستخدم الوحيد!');
                 return;
@@ -577,6 +592,7 @@
         }
 
         function renderUsers() {
+            usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
             const tbody = document.getElementById('usersTableBody');
             document.getElementById('usersCount').innerText = usersList.length;
             tbody.innerHTML = '';
@@ -636,6 +652,7 @@
         }
 
         function renderArchive() {
+            contractsArchive = JSON.parse(localStorage.getItem('shams_contracts') || '[]');
             const tbody = document.getElementById('archiveTableBody');
             document.getElementById('contractCount').innerText = contractsArchive.length;
             tbody.innerHTML = '';
