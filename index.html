@@ -125,6 +125,19 @@
             display: block;
             margin: 5px auto 0 auto;
         }
+        /* تنسيق خاص لتوقيع الرئيس التنفيذي لضمان وضوحه مع الخلفية السوداء */
+        .sig-ceo-wrapper {
+            background-color: #000; 
+            display: inline-block; 
+            padding: 4px 10px; 
+            border-radius: 6px; 
+            margin: 5px auto 0 auto;
+        }
+        .sig-ceo-img {
+            height: 50px;
+            object-fit: contain;
+            display: block;
+        }
 
         /* Action Buttons */
         .btn-action { padding: 10px 18px; border-radius: 6px; font-weight: 800; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
@@ -281,7 +294,7 @@
                     <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">..../../....</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">..../../....</span> )</div>
                     <p style="font-size:14px; line-height: 1.8; margin-top: 5px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
 
-                    <!-- Signatures Section (Tawqeaa under Name) -->
+                    <!-- Signatures Section -->
                     <div class="sig-grid">
                         <div class="sig-box">
                             <div class="title">التوقيع</div>
@@ -294,7 +307,9 @@
                         </div>
                         <div class="sig-box">
                             <div class="title">الرئيس التنفيذي</div>
-                            <img src="https://i.top4top.io/p_3899v8ams1.jpeg" alt="توقيع الرئيس التنفيذي" class="sig-img" onerror="this.style.display='none'">
+                            <div class="sig-ceo-wrapper">
+                                <img src="data:image/jpeg;base64,..." alt="توقيع الرئيس التنفيذي" class="sig-ceo-img" onerror="this.style.display='none'">
+                            </div>
                             <div class="sig-line" style="margin-top: 5px;"></div>
                         </div>
                     </div>
