@@ -7,48 +7,54 @@
     <style>
         :root {
             --primary: #0a192f;
-            --accent: #e65100;
+            --accent: #f57c00;
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a192f; color: #333; margin: 0; padding: 20px; }
         .container { max-width: 900px; margin: 0 auto; }
         .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); margin-bottom: 20px; }
-        h1, h2, h3 { text-align: center; color: var(--primary); }
+        h1, h2, h3 { text-align: center; color: var(--primary); margin-top: 0; }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
         .full-width { grid-column: span 2; }
         input, select, button { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        button { background: #f57c00; color: white; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button { background: var(--accent); color: white; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; margin-top: 10px; }
         button:hover { background: #e65100; }
         .btn-secondary { background: #6c757d; }
         .btn-secondary:hover { background: #5a6268; }
+        .btn-edit { background: #17a2b8; }
+        .btn-edit:hover { background: #138496; }
         .hidden { display: none; }
         
-        /* تصميم العقد المطابق للصورة */
-        #contractPaper { 
-            background: white; 
-            padding: 40px 50px; 
-            border: 1px solid #ddd; 
-            font-size: 15px; 
-            line-height: 1.8; 
-            color: #111;
-            box-sizing: border-box;
+        /* حاوية العقد المعتمدة على الصورة الأصلية */
+        .contract-wrapper {
+            position: relative;
+            width: 800px;
+            height: 1130px;
+            margin: 0 auto;
+            background: url('https://raw.githubusercontent.com/Riyad-R99/SHAMS.HR/main/WhatsApp%20Image%202026-09-04%20at%208.47.49%20PM.jpeg') no-repeat center center;
+            background-size: 100% 100%;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            color: #000;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
         }
-        .contract-header { text-align: center; margin-bottom: 20px; }
-        .contract-header img { max-width: 280px; height: auto; }
-        .contract-title { text-align: center; font-size: 20px; font-weight: bold; margin: 15px 0; color: #000; }
-        .section-title { font-size: 17px; font-weight: bold; margin-top: 15px; margin-bottom: 5px; color: #000; }
-        .field-value { font-weight: bold; border-bottom: 1px dashed #333; padding: 0 8px; display: inline-block; }
-        ol { margin-top: 5px; padding-right: 25px; }
-        li { margin-bottom: 4px; }
-        
-        .signatures-container { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: flex-end; 
-            margin-top: 40px; 
-            padding-top: 10px;
+
+        /* الطبقات النصية المحددة بدقة فوق الصورة */
+        .field {
+            position: absolute;
+            font-weight: bold;
+            font-size: 14px;
+            color: #000;
+            white-space: nowrap;
         }
-        .signature-box { text-align: center; width: 30%; font-weight: bold; font-size: 14px; }
-        .signature-box img { max-width: 130px; height: auto; display: block; margin: 5px auto 0 auto; }
+
+        /* تحديد أماكن إدراج النصوص على صورة العقد */
+        #posAgreeDate { top: 145px; right: 540px; }
+        #posName      { top: 203px; right: 620px; }
+        #posId        { top: 228px; right: 590px; }
+        #posPhone     { top: 252px; right: 590px; }
+        #posDept      { top: 277px; right: 570px; }
+        #posDuration  { top: 760px; right: 535px; }
+        #posStart     { top: 785px; right: 510px; }
+        #posEnd       { top: 785px; right: 685px; }
 
         /* جدول خزينة العقود */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
@@ -62,7 +68,7 @@
         @media print {
             body { background: white; padding: 0; }
             .no-print { display: none !important; }
-            #contractPaper { border: none; padding: 10px; width: 100%; }
+            .contract-wrapper { box-shadow: none; margin: 0; width: 100%; height: 100vh; }
         }
     </style>
 </head>
@@ -70,7 +76,7 @@
 
 <div class="container">
 
-    <!-- 1. نموذج تسجيل الدخول -->
+    <!-- 1. تسجيل الدخول -->
     <div id="loginBox" class="card">
         <h2>تسجيل الدخول - منصة shamshr</h2>
         <div style="max-width: 400px; margin: 0 auto;">
@@ -81,7 +87,7 @@
         </div>
     </div>
 
-    <!-- لوحة التحكم الرئيسية -->
+    <!-- التطبيق الرئيسي -->
     <div id="mainApp" class="hidden">
         
         <div class="card no-print">
@@ -89,94 +95,45 @@
             <button onclick="showSection('vault')" class="btn-secondary" style="width: auto;">📁 خزينة العقود الموقعة</button>
         </div>
 
-        <!-- 2. نموذج إدخال بيانات العقد -->
+        <!-- 2. نموذج إدخال البيانات -->
         <div id="createSection" class="card no-print">
             <h3>إدخال بيانات عقد انضمام متطوع</h3>
             <div class="form-grid">
                 <div><label>تاريخ الاتفاق:</label><input type="date" id="agreeDate"></div>
-                <div><label>اسم المتطوع/ة:</label><input type="text" id="fullName" placeholder="اسم المتطوع"></div>
+                <div><label>اسم المتطوع/ة:</label><input type="text" id="fullName" placeholder="الاسم الكامل"></div>
                 <div><label>رقم الهوية:</label><input type="text" id="nationalId" placeholder="1XXXXXXXXX"></div>
                 <div><label>رقم الجوال:</label><input type="text" id="phone" placeholder="05XXXXXXXX"></div>
-                <div class="full-width"><label>القسم:</label><input type="text" id="department" placeholder="مثال: الإدارة والتنظيم"></div>
+                <div><label>القسم:</label><input type="text" id="department" placeholder="مثال: الإدارة والتنظيم"></div>
                 <div><label>تاريخ بداية العقد:</label><input type="date" id="startDate"></div>
-                <div><label>مدة العقد (بالأشهر):</label><input type="number" id="durationMonths" value="3"></div>
+                <div class="full-width"><label>مدة العقد (بالأشهر):</label><input type="number" id="durationMonths" value="3"></div>
                 <div class="full-width">
                     <button onclick="generateContract()">توليد العقد المطابق للصورة</button>
                 </div>
             </div>
         </div>
 
-        <!-- 3. معاينة ورقة العقد (مطابقة للصورة تماماً) -->
+        <!-- 3. عرض العقد فوق الصورة الأصلية -->
         <div id="contractPreviewSection" class="hidden">
-            <div class="card no-print">
-                <button onclick="window.print()">🖨️ طباعة العقد / حفظ كـ PDF</button>
-                <button onclick="showSection('upload')" class="btn-secondary">📤 الانتقال لرفع العقد بعد التوقيع</button>
+            <div class="card no-print" style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="showSection('create')" class="btn-edit" style="width: auto;">✏️ تعديل البيانات (عودة)</button>
+                <button onclick="window.print()" style="width: auto;">🖨️ طباعة العقد / حفظ كـ PDF</button>
+                <button onclick="showSection('upload')" class="btn-secondary" style="width: auto;">📤 رفع العقد بعد التوقيع</button>
             </div>
 
-            <div id="contractPaper" class="card">
-                
-                <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
-
-                <p style="margin-top:20px;">
-                    تم الاتفاق في تاريخ: ( <span id="cAgreeDate" class="field-value">/ / 2026</span> ) بين كل من<br>
-                    <b>الطرف الأول:</b> إدارة فريق (شمس) التطوعي<br>
-                    <b>الطرف الثاني:</b> المتطوع/ة ( <span id="cName" class="field-value"></span> )<br>
-                    رقم الهوية ( <span id="cId" class="field-value"></span> )<br>
-                    رقم الجوال ( <span id="cPhone" class="field-value"></span> )<br>
-                    القسم ( <span id="cDept" class="field-value"></span> )
-                </p>
-
-                <div class="section-title">أولاً : موضوع العقد</div>
-                <p style="margin-top:0;">انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
-
-                <div class="section-title">ثانيًا : واجبات المتطوع</div>
-                <ol>
-                    <li>تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
-                    <li>الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
-                    <li>الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
-                    <li>الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
-                    <li>عدم طلب الإعفاء خلال الشهر الأول.</li>
-                    <li>عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
-                </ol>
-
-                <div class="section-title">ثالثًا : حقوق الإدارة</div>
-                <ol>
-                    <li>التعامل مع المتطوع باحترام وتثدير.</li>
-                    <li>منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
-                    <li>عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
-                    <li>توضيح أسباب إنهاء العقد عند حدوثه.</li>
-                    <li>حفظ بيانات وسجلات المتطوع.</li>
-                </ol>
-
-                <div class="section-title">رابعًا : مدة العقد و إنهاؤه</div>
-                <p style="margin-top:0;">
-                    مدة العقد: ( <span id="cDuration" class="field-value"></span> شهر )<br>
-                    تبدأ من تاريخ: ( <span id="cStart" class="field-value"></span> ) وتنتهي في: ( <span id="cEnd" class="field-value"></span> )<br>
-                    يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي
-                </p>
-
-                <div class="signatures-container">
-                    <div class="signature-box">
-                        التوقيع
-                        <br><br>
-                        _________________
-                    </div>
-                    <div class="signature-box">
-                        رئيس قسم الموارد البشرية
-                        <br><br>
-                        _________________
-                    </div>
-                    <div class="signature-box">
-                        توقيع الرئيس التنفيذي
-                        <br><br>
-                        _________________
-                    </div>
-                </div>
-
+            <!-- الورقة المطبوعة والمطابقة للصورة -->
+            <div class="contract-wrapper" id="contractPaper">
+                <div id="posAgreeDate" class="field"></div>
+                <div id="posName" class="field"></div>
+                <div id="posId" class="field"></div>
+                <div id="posPhone" class="field"></div>
+                <div id="posDept" class="field"></div>
+                <div id="posDuration" class="field"></div>
+                <div id="posStart" class="field"></div>
+                <div id="posEnd" class="field"></div>
             </div>
         </div>
 
-        <!-- 4. قسم رفع العقد الموقّع -->
+        <!-- 4. رفع العقد الموقّع -->
         <div id="uploadSection" class="card hidden no-print">
             <h3>رفع العقد الموقّع إلى الخزينة</h3>
             <div class="form-grid">
@@ -190,7 +147,7 @@
             </div>
         </div>
 
-        <!-- 5. خزينة العقود الموقعة -->
+        <!-- 5. خزينة العقود -->
         <div id="vaultSection" class="card hidden no-print">
             <h3>خزينة العقود الموقعة</h3>
             <table>
@@ -213,7 +170,6 @@
 </div>
 
 <script>
-    // الحسابات - يمكنك التعديل هنا (تأكد من الحروف الصغيرة والكبيرة)
     const users = {
         "Riyad": "5454645",
     };
@@ -259,27 +215,27 @@
             return;
         }
 
-        // حساب تاريخ الانتهاء تلقائياً
+        // حساب تاريخ الانتهاء
         let startDateObj = new Date(start);
         startDateObj.setMonth(startDateObj.getMonth() + duration);
         let endDateStr = startDateObj.toISOString().split('T')[0];
 
         function formatDate(dStr) {
-            if(!dStr) return "/ / 2026";
+            if(!dStr) return "";
             let parts = dStr.split('-');
             return `${parts[2]} / ${parts[1]} / ${parts[0]}`;
         }
 
-        document.getElementById('cAgreeDate').innerText = formatDate(agreeDate || start);
-        document.getElementById('cName').innerText = name;
-        document.getElementById('cId').innerText = id;
-        document.getElementById('cPhone').innerText = phone;
-        document.getElementById('cDept').innerText = dept;
-        document.getElementById('cDuration').innerText = duration;
-        document.getElementById('cStart').innerText = formatDate(start);
-        document.getElementById('cEnd').innerText = formatDate(endDateStr);
+        document.getElementById('posAgreeDate').innerText = formatDate(agreeDate || start);
+        document.getElementById('posName').innerText = name;
+        document.getElementById('posId').innerText = id;
+        document.getElementById('posPhone').innerText = phone;
+        document.getElementById('posDept').innerText = dept;
+        document.getElementById('posDuration').innerText = duration;
+        document.getElementById('posStart').innerText = formatDate(start);
+        document.getElementById('posEnd').innerText = formatDate(endDateStr);
 
-        // تجهيز بيانات الرفع تلقائياً
+        // تجهيز بيانات شاشة الرفع
         document.getElementById('upName').value = name;
         document.getElementById('upId').value = id;
         document.getElementById('upEndDate').value = endDateStr;
@@ -299,13 +255,11 @@
             return;
         }
 
-        const fileName = fileInput.files[0].name;
-
         contractsVault.push({
             name: name,
             id: id,
             endDate: endDate,
-            file: fileName
+            file: fileInput.files[0].name
         });
 
         alert("تم حفظ العقد الموقّع بنجاح في خزينة العقود!");
@@ -315,7 +269,6 @@
     function renderVault() {
         const tbody = document.getElementById('vaultTableBody');
         tbody.innerHTML = '';
-
         const today = new Date();
 
         contractsVault.forEach(item => {
