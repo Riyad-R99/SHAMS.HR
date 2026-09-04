@@ -157,7 +157,7 @@
         <div class="auth-card">
             <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 100px; height: auto; max-height: 80px; object-fit: contain; margin-bottom: 10px;" onerror="this.style.display='none'">
             <h2>فريق شمس التطوعي</h2>
-            <p>اسم الدخول الافتراضي: <b>admin</b> | كلمة المرور: <b>123456</b></p>
+            <p>يرجى كتابة اسم المستخدم وكلمة المرور</p>
             
             <form onsubmit="handleLogin(event)">
                 <div class="form-group" style="margin-bottom: 12px;">
@@ -295,7 +295,7 @@
                         </div>
                         <div class="sig-box">
                             <div class="title">الرئيس التنفيذي</div>
-                            <img src="https://e.top4top.io/s_3899ckg1u1.png" alt="توقيع الرئيس التنفيذي" class="sig-img" onerror="this.style.display='none'">
+                            <img src="https://i.top4top.io/s_3899lw57g1.png" alt="توقيع الرئيس التنفيذي" class="sig-img" onerror="this.style.display='none'">
                             <div class="sig-line" style="margin-top: 5px;"></div>
                         </div>
                     </div>
@@ -507,7 +507,7 @@
 
         window.changeUserPassword = async function(docId, username) {
             const newPass = prompt(`أدخل كلمة المرور الجديدة للمستخدم (${username}):`);
-            if(newPass === null) return; // Cancelled
+            if(newPass === null) return;
             if(newPass.trim() === '') {
                 alert('كلمة المرور لا يمكن أن تكون فارغة!');
                 return;
