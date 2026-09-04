@@ -401,22 +401,26 @@
         }
 
         // Authentication Handler
-        function handleLogin(e) {
-            e.preventDefault();
-            const uInput = document.getElementById('login_user').value.trim();
-            const pInput = document.getElementById('login_pass').value.trim();
+      function handleLogin(e) {
+    e.preventDefault();
+    const uInput = document.getElementById('login_user').value.trim();
+    const pInput = document.getElementById('login_pass').value.trim();
 
-            const foundUser = usersList.find(u => u.username === uInput && u.password === pInput);
+    // اطبع القيم لمعرفة ما يتم إدخاله ومقارنته بالمصفوفة
+    console.log("مدخلات المستخدم:", uInput, pInput);
+    console.log("قائمة المستخدمين المتاحة:", usersList);
 
-            if(foundUser) {
-                document.getElementById('authSection').style.display = 'none';
-                document.getElementById('appContent').style.display = 'block';
-                renderUsers();
-                renderArchive();
-            } else {
-                alert('خطأ: اسم المستخدم أو كلمة المرور غير صحيحة!');
-            }
-        }
+    const foundUser = usersList.find(u => u.username === uInput && u.password === pInput);
+
+    if(foundUser) {
+        document.getElementById('authSection').style.display = 'none';
+        document.getElementById('appContent').style.display = 'block';
+        renderUsers();
+        renderArchive();
+    } else {
+        alert('خطأ: اسم المستخدم أو كلمة المرور غير صحيح');
+    }
+}
 
         function logoutSystem() {
             document.getElementById('login_user').value = '';
