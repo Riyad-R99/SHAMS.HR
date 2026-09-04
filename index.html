@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>فريق شمس التطوعي - نظام إدارة وأرشيف العقود</title>
     
-    <!-- إعدادات تطبيق الـ PWA للجوال -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000a30">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,7 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- مكتبة تحويل HTML إلى PDF مباشرة -->
+    <!-- مكتبة تحويل HTML إلى PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
@@ -33,10 +32,9 @@
             background-color: var(--bg-body);
             color: var(--text-dark);
             min-height: 100vh;
-            position: relative;
         }
 
-        /* Strict Auth Lock Screen */
+        /* شاشة تسجيل الدخول */
         .auth-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -72,7 +70,7 @@
             margin-bottom: 25px;
         }
 
-        /* Nav Bar */
+        /* شريط التنقل العلوي */
         .top-navbar {
             background: var(--dark-navy); color: white; padding: 15px 30px;
             display: flex; justify-content: space-between; align-items: center;
@@ -86,7 +84,6 @@
             background: var(--primary-orange);
         }
 
-        /* Container & Cards Layout */
         .main-container { max-width: 950px; margin: 30px auto; padding: 0 20px; position: relative; z-index: 5; }
 
         .card-box {
@@ -99,48 +96,39 @@
         .form-control { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; outline: none; }
         .form-control:focus { border-color: var(--primary-orange); }
 
-        /* Contract Paper Layout (Compact for single A4 page without cutting) */
+        /* نموذج العقد بمقاسات مضغوطة متوافقة تماماً مع صفحة A4 */
         .contract-paper {
-            background: white; padding: 15px 25px; border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden;
-            width: 100%;
+            background: white; 
+            width: 794px; 
+            min-height: 1123px;
+            padding: 40px 50px; 
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05); 
+            position: relative; 
+            box-sizing: border-box;
         }
-        .contract-title { text-align: center; font-size: 16px; font-weight: 900; color: #000; margin: 5px 0; }
-        .contract-row { font-size: 11.5px; line-height: 1.45; font-weight: 600; color: #111; }
+        .contract-title { text-align: center; font-size: 18px; font-weight: 900; color: #000; margin: 10px 0 15px 0; }
+        .contract-row { font-size: 12px; line-height: 1.6; font-weight: 600; color: #111; margin-bottom: 4px; }
         .fill-val { border-bottom: 1px dashed #555; padding: 0 6px; font-weight: 800; color: #000; display: inline-block; }
-        .section-h { font-size: 12.5px; font-weight: 900; color: #000; margin: 6px 0 2px 0; }
+        .section-h { font-size: 13px; font-weight: 900; color: #000; margin: 12px 0 4px 0; border-right: 3px solid var(--primary-orange); padding-right: 6px; }
         .contract-ul { list-style: none; padding-right: 0; }
-        .contract-ul li { font-size: 11px; line-height: 1.35; color: #222; font-weight: 500; }
+        .contract-ul li { font-size: 11.5px; line-height: 1.5; color: #222; font-weight: 500; margin-bottom: 2px; }
 
-        /* Signatures Layout */
+        /* التوقيعات */
         .sig-grid { 
             display: flex; 
             justify-content: space-between; 
-            align-items: flex-start; 
-            margin-top: 15px; 
-            padding-top: 10px; 
+            align-items: flex-end; 
+            margin-top: 30px; 
+            padding-top: 15px; 
             border-top: 1px solid #e2e8f0; 
         }
         .sig-box { text-align: center; flex: 1; padding: 0 5px; }
-        .sig-box .title { 
-            color: #000; 
-            font-size: 10px; 
-            font-weight: 800; 
-            margin-bottom: 2px; 
-        }
-        .sig-line {
-            border-bottom: 1px dashed #777;
-            width: 80%;
-            margin: 0 auto;
-        }
-        .sig-img {
-            height: 35px;
-            object-fit: contain;
-            display: block;
-            margin: 1px auto 0 auto;
-        }
+        .sig-box .title { color: #000; font-size: 11px; font-weight: 800; margin-bottom: 5px; }
+        .sig-line { border-bottom: 1px dashed #777; width: 85%; margin: 0 auto; }
+        .sig-img { height: 45px; object-fit: contain; display: block; margin: 0 auto 2px auto; }
 
-        /* Action Buttons */
         .btn-action { padding: 10px 18px; border-radius: 6px; font-weight: 800; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
         .btn-orange { background: var(--primary-orange); color: white; }
         .btn-navy { background: var(--dark-navy); color: white; }
@@ -148,7 +136,6 @@
         .btn-danger { background: #ef4444; color: white; }
         .btn-blue { background: #3b82f6; color: white; }
 
-        /* Tables & Badges */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { padding: 12px; text-align: right; border-bottom: 1px solid #eee; font-size: 14px; }
         th { background: #f8fafc; color: var(--dark-navy); font-weight: 800; }
@@ -160,13 +147,13 @@
         @media print {
             .auth-overlay, .top-navbar, .card-box, .btn-action, .no-print { display: none !important; }
             .main-container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-            .contract-paper { box-shadow: none !important; padding: 5px !important; }
+            .contract-paper { box-shadow: none !important; margin: 0 !important; width: 100% !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Lock Screen / Login Overlay -->
+    <!-- شاشة تسجيل الدخول -->
     <div class="auth-overlay" id="authSection">
         <div class="auth-card">
             <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 100px; height: auto; max-height: 80px; object-fit: contain; margin-bottom: 10px;" onerror="this.style.display='none'">
@@ -185,10 +172,9 @@
         </div>
     </div>
 
-    <!-- Main System Content -->
+    <!-- النظام الرئيسي -->
     <div id="appContent" style="display: none;">
         
-        <!-- Top Navigation Bar -->
         <div class="top-navbar">
             <div style="font-weight: 900; font-size: 18px;">فريق شمس التطوعي</div>
             <div class="nav-links">
@@ -202,7 +188,7 @@
 
         <div class="main-container">
             
-            <!-- Tab 1: New Contract Form & Preview -->
+            <!-- Tab 1: إنشاء عقد -->
             <div id="createTab">
                 <div class="card-box no-print">
                     <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-edit"></i> تعبئة بيانات المتطوع الجديد</h3>
@@ -248,75 +234,76 @@
 
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button onclick="saveAndArchiveContract()" class="btn-action btn-orange"><i class="fas fa-save"></i> حفظ العقد في الأرشيف السحابي</button>
-                        <button onclick="downloadContractPDF()" class="btn-action btn-green"><i class="fas fa-file-pdf"></i> تنزيل العقد (ملف)</button>
-                        <button onclick="window.print()" class="btn-action btn-navy"><i class="fas fa-print"></i> طباعة العقد مباشر</button>
+                        <button onclick="downloadContractPDF()" class="btn-action btn-green"><i class="fas fa-file-pdf"></i> تنزيل العقد (PDF)</button>
+                        <button onclick="window.print()" class="btn-action btn-navy"><i class="fas fa-print"></i> طباعة مباشرة</button>
                     </div>
                 </div>
 
-                <!-- Contract Printable View -->
-                <div class="contract-paper" id="contractPaper">
-                    <div style="text-align: right;">
-                        <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 90px; height: auto; object-fit: contain;" onerror="this.style.display='none'">
-                    </div>
-
-                    <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
-
-                    <div class="contract-row">تم الاتفاق في تاريخ: ( <span class="fill-val" id="p_today">..../../....</span> ) بين كل من:</div>
-                    <div class="contract-row">الطرف الأول : إدارة فريق (شمس) التطوّعي</div>
-                    <div class="contract-row">الطرف الثاني : المتطوع/ـة ( <span class="fill-val" id="p_name">...................</span> )</div>
-                    <div class="contract-row">رقم الهوية / الإقامة: ( <span class="fill-val" id="p_id">...................</span> )</div>
-                    <div class="contract-row">رقم الجوال: ( <span class="fill-val" id="p_phone">...................</span> )</div>
-                    <div class="contract-row">تاريخ الميلاد: ( <span class="fill-val" id="p_dob">...................</span> )</div>
-                    <div class="contract-row">القسم / الإدارة: ( <span class="fill-val" id="p_dept">...................</span> )</div>
-
-                    <div class="section-h">أولاً : موضوع العقد</div>
-                    <p style="font-size:11px; line-height: 1.35;">انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
-
-                    <div class="section-h">ثانياً : واجبات المتطوع</div>
-                    <ul class="contract-ul">
-                        <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
-                        <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
-                        <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
-                        <li>4. الالتزام بتتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
-                        <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
-                        <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
-                    </ul>
-
-                    <div class="section-h">ثالثاً : حقوق الإدارة</div>
-                    <ul class="contract-ul">
-                        <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
-                        <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
-                        <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
-                        <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
-                        <li>5. حفظ بيانات وسجلات المتطوع.</li>
-                    </ul>
-
-                    <div class="section-h">رابعاً : مدة العقد و انهاؤه</div>
-                    <div class="contract-row">مدة العقد: ( <span class="fill-val" id="p_duration">1 شهر</span> )</div>
-                    <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">..../../....</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">..../../....</span> )</div>
-                    <p style="font-size:11px; line-height: 1.35; margin-top: 1px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
-
-                    <!-- Signatures Section -->
-                    <div class="sig-grid">
-                        <div class="sig-box">
-                            <div class="title">التوقيع</div>
-                            <div class="sig-line" style="margin-top: 20px;"></div>
+                <!-- معاينة العقد -->
+                <div style="overflow-x: auto; width: 100%;">
+                    <div class="contract-paper" id="contractPaper">
+                        <div style="text-align: right;">
+                            <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 100px; height: auto; object-fit: contain;" onerror="this.style.display='none'">
                         </div>
-                        <div class="sig-box">
-                            <div class="title">رئيس قسم الموارد البشرية</div>
-                            <img src="https://f.top4top.io/p_3899dofgr1.png" alt="توقيع رئيس الموارد البشرية" class="sig-img" onerror="this.style.display='none'">
-                            <div class="sig-line" style="margin-top: 1px;"></div>
-                        </div>
-                        <div class="sig-box">
-                            <div class="title">الرئيس التنفيذي</div>
-                            <img src="https://f.top4top.io/s_3899xj02c1.png" alt="توقيع الرئيس التنفيذي" class="sig-img" onerror="this.style.display='none'">
-                            <div class="sig-line" style="margin-top: 1px;"></div>
+
+                        <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
+
+                        <div class="contract-row">تم الاتفاق في تاريخ: ( <span class="fill-val" id="p_today">..../../....</span> ) بين كل من:</div>
+                        <div class="contract-row">الطرف الأول : إدارة فريق (شمس) التطوّعي</div>
+                        <div class="contract-row">الطرف الثاني : المتطوع/ـة ( <span class="fill-val" id="p_name">...................</span> )</div>
+                        <div class="contract-row">رقم الهوية / الإقامة: ( <span class="fill-val" id="p_id">...................</span> )</div>
+                        <div class="contract-row">رقم الجوال: ( <span class="fill-val" id="p_phone">...................</span> )</div>
+                        <div class="contract-row">تاريخ الميلاد: ( <span class="fill-val" id="p_dob">...................</span> )</div>
+                        <div class="contract-row">القسم / الإدارة: ( <span class="fill-val" id="p_dept">...................</span> )</div>
+
+                        <div class="section-h">أولاً : موضوع العقد</div>
+                        <p style="font-size:11.5px; line-height: 1.5; font-weight: 500;">انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
+
+                        <div class="section-h">ثانياً : واجبات المتطوع</div>
+                        <ul class="contract-ul">
+                            <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
+                            <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
+                            <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
+                            <li>4. الالتزام بتتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
+                            <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
+                            <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
+                        </ul>
+
+                        <div class="section-h">ثالثاً : حقوق الإدارة</div>
+                        <ul class="contract-ul">
+                            <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
+                            <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
+                            <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
+                            <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
+                            <li>5. حفظ بيانات وسجلات المتطوع.</li>
+                        </ul>
+
+                        <div class="section-h">رابعاً : مدة العقد و انهاؤه</div>
+                        <div class="contract-row">مدة العقد: ( <span class="fill-val" id="p_duration">1 شهر</span> )</div>
+                        <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">..../../....</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">..../../....</span> )</div>
+                        <p style="font-size:11.5px; line-height: 1.5; font-weight: 500; margin-top: 4px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
+
+                        <div class="sig-grid">
+                            <div class="sig-box">
+                                <div class="title">التوقيع</div>
+                                <div class="sig-line" style="margin-top: 40px;"></div>
+                            </div>
+                            <div class="sig-box">
+                                <div class="title">رئيس قسم الموارد البشرية</div>
+                                <img src="https://f.top4top.io/p_3899dofgr1.png" alt="توقيع رئيس الموارد البشرية" class="sig-img" onerror="this.style.display='none'">
+                                <div class="sig-line"></div>
+                            </div>
+                            <div class="sig-box">
+                                <div class="title">الرئيس التنفيذي</div>
+                                <img src="https://f.top4top.io/s_3899xj02c1.png" alt="توقيع الرئيس التنفيذي" class="sig-img" onerror="this.style.display='none'">
+                                <div class="sig-line"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab 2: Attach External Contract -->
+            <!-- Tab 2: إرفاق عقد -->
             <div id="uploadTab" style="display: none;">
                 <div class="card-box">
                     <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-cloud-upload-alt"></i> إرفاق عقد خارجي / موقع يدويًا</h3>
@@ -344,7 +331,7 @@
                 </div>
             </div>
 
-            <!-- Tab 3: Archive View -->
+            <!-- Tab 3: الأرشيف -->
             <div id="archiveTab" style="display: none;">
                 <div class="card-box">
                     <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-archive"></i> أرشيف العقود المعتمدة والمرفقة (متزامن سحابياً)</h3>
@@ -365,7 +352,7 @@
                 </div>
             </div>
 
-            <!-- Tab 4: System Users Control (Admin Only) -->
+            <!-- Tab 4: المستخدمين -->
             <div id="usersTab" style="display: none;">
                 <div class="card-box">
                     <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد للنظام</h3>
@@ -415,7 +402,7 @@
         </div>
     </div>
 
-    <!-- Firebase SDK Integration & Cloud Sync Logic -->
+    <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -702,17 +689,17 @@
             document.getElementById('p_duration').innerText = durationVal + ' شهر';
         }
 
-        // دالة تنزيل العقد بصيغة PDF في صفحة A4 واحدة متكاملة تماماً وبدون أي قطع
+        // دالة تنزيل العقد بصيغة PDF بشكل مثالي ومتكامل بدون أي فراغات بيضاء
         function downloadContractPDF() {
             const name = document.getElementById('in_name').value || 'عقد_متطوع';
             const element = document.getElementById('contractPaper');
             
             const opt = {
-                margin:       2,
+                margin:       [5, 5, 5, 5],
                 filename:     `عقد_${name}.pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, letterRendering: true, windowWidth: 800 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true }
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
 
             html2pdf().from(element).set(opt).save();
