@@ -3,410 +3,575 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فريق شمس التطوعي - إدارة الموارد البشرية</title>
+    <title>فريق شمس التطوعي - نظام إدارة العقود والمستخدمين</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-orange: #f37021;
             --dark-navy: #000a30;
-            --text-black: #111111;
             --bg-body: #f4f6f9;
+            --text-dark: #1e293b;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Tajawal', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
 
         body {
             background-color: var(--bg-body);
-            color: var(--text-black);
+            color: var(--text-dark);
             min-height: 100vh;
             position: relative;
         }
 
-        /* Full page watermark */
+        /* Full Background Watermark */
         body::before {
             content: "";
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 550px;
-            height: 550px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><path fill="%23f37021" opacity="0.04" d="M250,50 C260,100 290,120 320,100 C310,140 350,160 380,140 C350,180 390,210 420,200 C370,230 400,270 420,300 C370,300 370,350 380,390 C340,360 320,400 300,430 C280,390 250,420 230,450 C230,400 190,410 170,430 C180,380 140,370 120,380 C150,340 120,310 90,300 C130,270 110,230 80,210 C120,200 120,160 100,130 C140,150 170,120 180,80 C200,120 230,100 250,50 Z"/></svg>') no-repeat center center;
+            width: 500px; height: 500px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><path fill="%23f37021" opacity="0.03" d="M250,50 C260,100 290,120 320,100 C310,140 350,160 380,140 C350,180 390,210 420,200 C370,230 400,270 420,300 C370,300 370,350 380,390 C340,360 320,400 300,430 C280,390 250,420 230,450 C230,400 190,410 170,430 C180,380 140,370 120,380 C150,340 120,310 90,300 C130,270 110,230 80,210 C120,200 120,160 100,130 C140,150 170,120 180,80 C200,120 230,100 250,50 Z"/></svg>') no-repeat center center;
             background-size: contain;
             pointer-events: none;
             z-index: 0;
         }
 
-        /* Auth Screen */
+        /* Full Access Protection Screen */
         .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            position: relative;
-            z-index: 10;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px; position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-body); z-index: 9999;
         }
-
         .auth-card {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 40px 30px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            text-align: center;
-            border: 1px solid #e1e6eb;
+            background: #fff; border-radius: 16px; padding: 40px; width: 100%; max-width: 420px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; border: 1px solid #e1e6eb;
         }
 
-        .auth-title {
-            font-size: 22px;
-            font-weight: 800;
-            color: var(--dark-navy);
-            margin-bottom: 6px;
+        /* Navigation Bar */
+        .top-navbar {
+            background: var(--dark-navy); color: white; padding: 15px 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); position: relative; z-index: 10;
+        }
+        .nav-links button {
+            background: transparent; border: none; color: white; font-size: 14px; font-weight: 700;
+            margin-left: 10px; padding: 8px 14px; border-radius: 6px; cursor: pointer; transition: 0.3s;
+        }
+        .nav-links button.active, .nav-links button:hover {
+            background: var(--primary-orange);
         }
 
-        .auth-subtitle {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 25px;
-        }
+        /* Main Container */
+        .main-container { max-width: 950px; margin: 30px auto; padding: 0 20px; position: relative; z-index: 5; }
 
-        .form-group {
-            margin-bottom: 18px;
-            text-align: right;
+        /* Card Elements */
+        .card-box {
+            background: white; padding: 30px; border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom: 30px;
         }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .form-group { text-align: right; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 5px; color: var(--dark-navy); }
+        .form-control { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; outline: none; }
+        .form-control:focus { border-color: var(--primary-orange); }
 
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: var(--dark-navy);
-        }
+        /* Signature Canvas */
+        .sig-container { border: 2px dashed #ccc; border-radius: 8px; background: #fafafa; position: relative; }
+        canvas { width: 100%; height: 120px; cursor: crosshair; }
+        .clear-sig-btn { position: absolute; left: 10px; top: 10px; background: #e2e8f0; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; }
 
-        .form-control {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
+        /* Contract Document */
+        .contract-paper {
+            background: white; padding: 45px 50px; border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden;
         }
-
-        .form-control:focus {
-            border-color: var(--primary-orange);
-            box-shadow: 0 0 0 3px rgba(243, 112, 33, 0.15);
-        }
-
-        .btn-submit {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary-orange);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        .btn-submit:hover {
-            background-color: #d95f17;
-        }
-
-        /* Top Action Bar */
-        .top-bar {
-            max-width: 850px;
-            margin: 20px auto 0;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            z-index: 10;
-        }
-
-        .btn-action {
-            padding: 10px 22px;
-            border-radius: 8px;
-            font-weight: 800;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-print {
-            background-color: var(--primary-orange);
-            color: white;
-        }
-
-        .btn-logout {
-            background-color: #4a5568;
-            color: white;
-        }
-
-        /* Contract Paper Exact Replica */
-        .contract-wrapper {
-            max-width: 850px;
-            margin: 20px auto 40px;
-            padding: 0 20px;
-            position: relative;
-            z-index: 5;
-        }
-
-        .contract-card {
-            background: #ffffff;
-            padding: 45px 50px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Watermark image inside contract */
-        .contract-card::before {
-            content: "";
-            position: absolute;
-            top: 45%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 480px;
-            height: 480px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><path fill="%23f37021" opacity="0.05" d="M250,50 C260,100 290,120 320,100 C310,140 350,160 380,140 C350,180 390,210 420,200 C370,230 400,270 420,300 C370,300 370,350 380,390 C340,360 320,400 300,430 C280,390 250,420 230,450 C230,400 190,410 170,430 C180,380 140,370 120,380 C150,340 120,310 90,300 C130,270 110,230 80,210 C120,200 120,160 100,130 C140,150 170,120 180,80 C200,120 230,100 250,50 Z"/></svg>') no-repeat center center;
-            background-size: contain;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .contract-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .contract-main-title {
-            text-align: center;
-            font-size: 22px;
-            font-weight: 900;
-            color: #000000;
-            margin: 15px 0 25px 0;
-        }
-
-        .contract-row {
-            font-size: 15px;
-            line-height: 2;
-            color: #111;
-            margin-bottom: 8px;
-            font-weight: 600;
-        }
-
-        .fill-line {
-            display: inline-block;
-            border-bottom: 1px solid #777;
-            min-width: 150px;
-            text-align: center;
-            padding: 0 5px;
-            font-weight: 700;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 900;
-            color: #000;
-            margin: 18px 0 8px 0;
-        }
-
-        .contract-list {
-            list-style: none;
-            padding-right: 0;
-        }
-
-        .contract-list li {
-            font-size: 14.5px;
-            line-height: 1.9;
-            color: #222;
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
+        .contract-title { text-align: center; font-size: 20px; font-weight: 900; color: #000; margin: 20px 0; }
+        .contract-row { font-size: 15px; line-height: 2; font-weight: 600; color: #111; }
+        .fill-val { border-bottom: 1px dashed #555; padding: 0 10px; font-weight: 800; color: #000; display: inline-block; }
+        .section-h { font-size: 16px; font-weight: 900; color: #000; margin: 18px 0 6px 0; }
+        .contract-ul { list-style: none; padding-right: 0; }
+        .contract-ul li { font-size: 14px; line-height: 1.8; color: #222; font-weight: 500; }
 
         /* Signatures Grid */
-        .signatures-grid {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 45px;
-            padding-top: 10px;
-        }
+        .sig-grid { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; }
+        .sig-box { text-align: center; font-weight: 800; font-size: 13px; }
+        .sig-box img { max-width: 140px; max-height: 60px; display: block; margin: 10px auto 0; }
 
-        .sig-box {
-            text-align: center;
-            font-weight: 800;
-            font-size: 14px;
-            color: #000;
-        }
+        /* Buttons */
+        .btn-action { padding: 10px 18px; border-radius: 6px; font-weight: 800; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-orange { background: var(--primary-orange); color: white; }
+        .btn-navy { background: var(--dark-navy); color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: right; border-bottom: 1px solid #eee; font-size: 14px; }
+        th { background: #f8fafc; color: var(--dark-navy); font-weight: 800; }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; }
+        .badge-active { background: #dcfce7; color: #15803d; }
+        .badge-warning { background: #fef9c3; color: #a16207; }
+        .badge-expired { background: #fee2e2; color: #b91c1c; }
 
         @media print {
-            body { background: white !important; }
-            body::before, .top-bar, .auth-container { display: none !important; }
-            .contract-wrapper { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-            .contract-card { box-shadow: none !important; padding: 20px 30px !important; border: none !important; }
+            body::before, .top-navbar, .card-box, .btn-action, .no-print, .auth-container { display: none !important; }
+            .main-container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            .contract-paper { box-shadow: none !important; padding: 20px !important; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Login Section -->
+    <!-- Protected Login Overlay Screen -->
     <div class="auth-container" id="authSection">
         <div class="auth-card">
             <div style="margin-bottom: 15px;">
-                <svg width="150" height="90" viewBox="0 0 300 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M150,20 C158,50 180,60 200,50 C190,80 220,90 240,80 C220,100 240,120 260,120 C230,135 245,160 255,180 C225,170 210,195 200,210 C185,180 165,200 150,220 C135,200 115,180 100,210 C90,195 75,170 45,180 C55,160 70,135 40,120 C60,120 80,100 60,80 C80,90 110,80 100,50 C120,60 142,50 150,20 Z" fill="#f37021"/>
-                    <circle cx="150" cy="130" r="50" fill="#fbb03b"/>
-                    <text x="150" y="132" font-family="'Tajawal', sans-serif" font-weight="900" font-size="24" fill="#000a30" text-anchor="middle">فريق شمس التطوعي</text>
-                    <text x="150" y="152" font-family="Arial, sans-serif" font-weight="bold" font-size="10" fill="#000a30" text-anchor="middle" letter-spacing="2">EXECUTIVE MANAGEMENT</text>
+                <svg width="140" height="70" viewBox="0 0 320 150" fill="none">
+                    <path d="M110,15 C118,38 135,45 150,38 C142,60 165,68 180,60 C165,75 180,90 195,90 C172,102 184,120 192,135 C168,128 158,146 150,158 C138,135 124,150 112,165 C105,150 93,132 70,140 C78,124 88,105 65,95 C80,95 95,80 80,65 C95,72 118,65 110,38 Z" fill="#f37021"/>
+                    <circle cx="120" cy="98" r="42" fill="#fbb03b"/>
                 </svg>
             </div>
-            <h1 class="auth-title">تسجيل الدخول</h1>
-            <p class="auth-subtitle">إدارة شمس التطوعي - الموارد البشرية</p>
-
-            <form onsubmit="event.preventDefault(); document.getElementById('authSection').style.display='none'; document.getElementById('appContent').style.display='block';">
-                <div class="form-group">
-                    <label>اسم المستخدم</label>
-                    <input type="text" class="form-control" placeholder="أدخل اسم المستخدم" required value="admin">
+            <h1 style="color: var(--dark-navy); font-size: 22px; font-weight: 900; margin-bottom: 6px;">فريق شمس التطوعي</h1>
+            <p style="color: #666; font-size: 13px; margin-bottom: 22px;">أدخل اسم المستخدم وكلمة المرور للوصول للنظام</p>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group" style="margin-bottom: 14px;">
+                    <input type="text" id="login_user" class="form-control" placeholder="اسم المستخدم" required>
                 </div>
-                <div class="form-group">
-                    <label>كلمة المرور</label>
-                    <input type="password" class="form-control" placeholder="••••••••" required value="123456">
+                <div class="form-group" style="margin-bottom: 22px;">
+                    <input type="password" id="login_pass" class="form-control" placeholder="كلمة المرور" required>
                 </div>
-                <button type="submit" class="btn-submit">دخول النظام</button>
+                <button type="submit" class="btn-action btn-orange" style="width: 100%; justify-content: center; font-size: 15px;">تسجيل الدخول</button>
             </form>
+            <div style="margin-top: 15px; font-size: 11px; color: #888;">
+                الحساب الرئيسي الأول: <b>admin</b> / كلمة المرور: <b>123456</b>
+            </div>
         </div>
     </div>
 
-    <!-- Contract Section -->
+    <!-- Main Protected System Area -->
     <div id="appContent" style="display: none;">
         
-        <div class="top-bar">
-            <button onclick="document.getElementById('authSection').style.display='flex'; document.getElementById('appContent').style.display='none';" class="btn-action btn-logout">
-                <i class="fas fa-sign-out-alt"></i> تسجيل خروج
-            </button>
-            <button onclick="window.print();" class="btn-action btn-print">
-                <i class="fas fa-print"></i> طباعة العقد
-            </button>
+        <!-- Navbar -->
+        <div class="top-navbar">
+            <div style="font-weight: 900; font-size: 18px;">فريق شمس التطوعي</div>
+            <div class="nav-links">
+                <button id="btn-create" class="active" onclick="switchTab('createTab')"><i class="fas fa-file-signature"></i> عقد جديد</button>
+                <button id="btn-archive" onclick="switchTab('archiveTab')"><i class="fas fa-box-archive"></i> أرشيف العقود (<span id="contractCount">0</span>)</button>
+                <button id="btn-users" onclick="switchTab('usersTab')"><i class="fas fa-users-gear"></i> إدارة المستخدمين (<span id="usersCount">0</span>)</button>
+            </div>
+            <button onclick="logoutSystem();" class="btn-action" style="background: #475569; color: white;"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
         </div>
 
-        <div class="contract-wrapper">
-            <div class="contract-card">
-                <div class="contract-content">
-                    
-                    <!-- Top Logo -->
+        <div class="main-container">
+            
+            <!-- Tab 1: Create Contract -->
+            <div id="createTab">
+                <div class="card-box no-print">
+                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-edit"></i> تعبئة بيانات المتطوع الجديد</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>الاسم الكامل</label>
+                            <input type="text" id="in_name" class="form-control" placeholder="أدخل الاسم الكامل" oninput="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهوية / الإقامة</label>
+                            <input type="text" id="in_id" class="form-control" placeholder="10 أرقام" oninput="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الجوال</label>
+                            <input type="text" id="in_phone" class="form-control" placeholder="05xxxxxxxx" oninput="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ الميلاد</label>
+                            <input type="date" id="in_dob" class="form-control" onchange="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>القسم / الإدارة</label>
+                            <input type="text" id="in_dept" class="form-control" placeholder="مثال: الموارد البشرية" oninput="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ الانضمام</label>
+                            <input type="date" id="in_startDate" class="form-control" onchange="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>مدة العقد</label>
+                            <select id="in_duration" class="form-control" onchange="updateContractPreview()">
+                                <option value="1">شهر واحد</option>
+                                <option value="3">3 أشهر</option>
+                                <option value="6">6 أشهر</option>
+                                <option value="12">سنة كاملة (12 شهر)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Digital Signature Pad -->
+                    <div class="form-group" style="margin-bottom: 20px;">
+                        <label>التوقيع الرقمي للمتطوع</label>
+                        <div class="sig-container">
+                            <button class="clear-sig-btn" onclick="clearSignature()"><i class="fas fa-eraser"></i> مسح التوقيع</button>
+                            <canvas id="sigCanvas"></canvas>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px;">
+                        <button onclick="saveAndArchiveContract()" class="btn-action btn-orange"><i class="fas fa-save"></i> حفظ وتوقيع العقد في الأرشيف</button>
+                        <button onclick="window.print()" class="btn-action btn-navy"><i class="fas fa-print"></i> طباعة العقد مباشر</button>
+                    </div>
+                </div>
+
+                <!-- Printable Contract Paper Preview -->
+                <div class="contract-paper" id="contractPaper">
                     <div style="text-align: right;">
-                        <svg width="220" height="100" viewBox="0 0 320 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M110,15 C118,38 135,45 150,38 C142,60 165,68 180,60 C165,75 180,90 195,90 C172,102 184,120 192,135 C168,128 158,146 150,158 C138,135 124,150 112,165 C105,150 93,132 70,140 C78,124 88,105 65,95 C80,95 95,80 80,65 C95,72 118,65 110,38 C125,45 140,38 110,15 Z" fill="#f37021"/>
+                        <svg width="180" height="80" viewBox="0 0 320 150" fill="none">
+                            <path d="M110,15 C118,38 135,45 150,38 C142,60 165,68 180,60 C165,75 180,90 195,90 C172,102 184,120 192,135 C168,128 158,146 150,158 C138,135 124,150 112,165 C105,150 93,132 70,140 C78,124 88,105 65,95 C80,95 95,80 80,65 C95,72 118,65 110,38 Z" fill="#f37021"/>
                             <circle cx="120" cy="98" r="42" fill="#fbb03b"/>
                             <text x="120" y="98" font-family="'Tajawal', sans-serif" font-weight="900" font-size="20" fill="#000a30" text-anchor="middle">فريق شمس التطوعي</text>
-                            <text x="120" y="115" font-family="Arial" font-weight="bold" font-size="8" fill="#000a30" text-anchor="middle" letter-spacing="1.5">EXECUTIVE MANAGEMENT</text>
                         </svg>
                     </div>
 
-                    <div class="contract-main-title">عقد اتفاقية انضمام لادارة "شمس" التطوعي</div>
+                    <div class="contract-title">عقد اتفاقية انضمام لادارة "شمس" التطوعي</div>
 
-                    <div class="contract-row">
-                        تم الاتفاق في تاريخ: ( <span class="fill-line">2026 / / </span> ) بين كل من
-                    </div>
-                    <div class="contract-row">
-                        الطرف الأول : إدارة فريق (شمس) التطوّعي
-                    </div>
-                    <div class="contract-row">
-                        الطرف الثاني : المتطوع/ـة ( <span class="fill-line" style="min-width: 280px;"></span> )
-                    </div>
-                    <div class="contract-row">
-                        رقم الهوية ( <span class="fill-line" style="min-width: 200px;"></span> )
-                    </div>
-                    <div class="contract-row">
-                        رقم الجوال ( <span class="fill-line" style="min-width: 200px;"></span> )
-                    </div>
-                    <div class="contract-row">
-                        القسم ( <span class="fill-line" style="min-width: 240px;"></span> )
-                    </div>
+                    <div class="contract-row">تم الاتفاق في تاريخ: ( <span class="fill-val" id="p_today">2026/09/04</span> ) بين كل من:</div>
+                    <div class="contract-row">الطرف الأول : إدارة فريق (شمس) التطوّعي</div>
+                    <div class="contract-row">الطرف الثاني : المتطوع/ـة ( <span class="fill-val" id="p_name">...................</span> )</div>
+                    <div class="contract-row">رقم الهوية / الإقامة: ( <span class="fill-val" id="p_id">...................</span> )</div>
+                    <div class="contract-row">رقم الجوال: ( <span class="fill-val" id="p_phone">...................</span> )</div>
+                    <div class="contract-row">تاريخ الميلاد: ( <span class="fill-val" id="p_dob">...................</span> )</div>
+                    <div class="contract-row">القسم / الإدارة: ( <span class="fill-val" id="p_dept">...................</span> )</div>
 
-                    <div class="section-title">أولاً : موضوع العقد</div>
-                    <p style="font-size: 14.5px; line-height: 1.8; font-weight: 500; color: #222;">
-                        انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.
-                    </p>
+                    <div class="section-h">أولاً : موضوع العقد</div>
+                    <p style="font-size:14px; line-height: 1.8;">انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
 
-                    <div class="section-title">ثانياً : واجبات المتطوع</div>
-                    <ul class="contract-list">
+                    <div class="section-h">ثانياً : واجبات المتطوع</div>
+                    <ul class="contract-ul">
                         <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
                         <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
                         <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
-                        <li>4. الالتزام بتتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
-                        <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
-                        <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسمياً.</li>
                     </ul>
 
-                    <div class="section-title">ثالثاً : حقوق الإدارة</div>
-                    <ul class="contract-list">
-                        <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
-                        <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
-                        <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
-                        <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
-                        <li>5. حفظ بيانات وسجلات المتطوع.</li>
-                    </ul>
+                    <div class="section-h">ثالثاً : مدة العقد وتاريخ الانتهاء</div>
+                    <div class="contract-row">مدة العقد: ( <span class="fill-val" id="p_duration">1 شهر</span> )</div>
+                    <div class="contract-row">تاريخ الانضمام: ( <span class="fill-val" id="p_startDate">2026/09/04</span> )</div>
+                    <div class="contract-row">تاريخ الانتهاء التلقائي: ( <span class="fill-val" id="p_endDate">2026/10/04</span> )</div>
 
-                    <div class="section-title">رابعاً : مدة العقد و إنهائه</div>
-                    <div class="contract-row" style="font-weight: 500; font-size: 14.5px;">
-                        مدة العقد: ( <span class="fill-line" style="min-width: 80px;">شهر</span> )
-                    </div>
-                    <div class="contract-row" style="font-weight: 500; font-size: 14.5px;">
-                        تبدأ من تاريخ: ( <span class="fill-line">2026 / / </span> ) وتنتهي في: ( <span class="fill-line">2026 / / </span> )
-                    </div>
-                    <p style="font-size: 14px; line-height: 1.8; font-weight: 500; color: #222; margin-top: 5px;">
-                        يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.
-                    </p>
-
-                    <!-- Signatures -->
-                    <div class="signatures-grid">
+                    <div class="sig-grid">
                         <div class="sig-box">
                             توقيع رئيس الموارد البشرية
-                            <div style="margin-top: 15px;">
-                                <svg width="120" height="35" viewBox="0 0 120 35">
-                                    <path d="M10,25 Q30,5 50,25 T90,8 T110,20" fill="none" stroke="#000" stroke-width="2"/>
-                                </svg>
+                            <div style="margin-top: 10px;">
+                                <svg width="100" height="30"><path d="M10,20 Q30,5 50,20 T90,8" fill="none" stroke="#000" stroke-width="2"/></svg>
                             </div>
                         </div>
-
+                        <div class="sig-box">توقيع الرئيس التنفيذي</div>
                         <div class="sig-box">
-                            توقيع رئيس الرئيسي التنفيذي
-                        </div>
-
-                        <div class="sig-box">
-                            التوقيع
+                            توقيع المتطوع
+                            <div id="p_sigImgContainer"><img id="p_sigImg" src="" alt="" style="display:none;"></div>
                         </div>
                     </div>
-
-                    <!-- Bottom Small Logo -->
-                    <div style="margin-top: 25px; text-align: right;">
-                        <svg width="100" height="40" viewBox="0 0 200 80">
-                            <path d="M40,10 C45,20 55,25 60,20 C55,30 65,35 70,30 C60,40 70,45 75,45 C65,50 70,60 60,55 C55,65 50,55 45,65 C40,55 35,60 30,50 C25,55 20,45 15,40 C25,40 20,30 30,30 C25,20 35,20 40,10 Z" fill="#f37021"/>
-                            <circle cx="45" cy="40" r="18" fill="#fbb03b"/>
-                            <text x="45" y="42" font-family="'Tajawal', sans-serif" font-weight="800" font-size="8" fill="#000a30" text-anchor="middle">فريق شمس التطوعي</text>
-                        </svg>
-                    </div>
-
                 </div>
             </div>
+
+            <!-- Tab 2: Archive View -->
+            <div id="archiveTab" style="display: none;">
+                <div class="card-box">
+                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-archive"></i> أرشيف العقود الموقعة</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم المتطوع</th>
+                                <th>الهوية</th>
+                                <th>القسم</th>
+                                <th>الانضمام</th>
+                                <th>الانتهاء</th>
+                                <th>الحالة والتنبيه</th>
+                                <th>إجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody id="archiveTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 3: Users Management -->
+            <div id="usersTab" style="display: none;">
+                <div class="card-box">
+                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد للنظام</h3>
+                    <form onsubmit="addUser(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>اسم الموظف / المستخدم</label>
+                                <input type="text" id="u_name" class="form-control" placeholder="مثال: أحمد علي" required>
+                            </div>
+                            <div class="form-group">
+                                <label>اسم الدخول (Username)</label>
+                                <input type="text" id="u_username" class="form-control" placeholder="مثال: ahmed" required>
+                            </div>
+                            <div class="form-group">
+                                <label>كلمة المرور (Password)</label>
+                                <input type="password" id="u_password" class="form-control" placeholder="••••••••" required>
+                            </div>
+                            <div class="form-group">
+                                <label>الصلاحية</label>
+                                <select id="u_role" class="form-control">
+                                    <option value="مدير النظام">مدير النظام</option>
+                                    <option value="مسؤول موارد بشرية">مسؤول موارد بشرية</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-action btn-orange"><i class="fas fa-check"></i> حفظ المستخدم</button>
+                    </form>
+                </div>
+
+                <div class="card-box">
+                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-users"></i> قائمة حسابات الدخول المعتمدة</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم الموظف</th>
+                                <th>اسم المستخدم</th>
+                                <th>كلمة المرور</th>
+                                <th>الصلاحية</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </div>
 
+    <script>
+        // Accounts & Users Setup
+        let usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
+        if(usersList.length === 0) {
+            usersList = [{ id: 1, name: 'المدير العام', username: 'admin', password: '123456', role: 'مدير النظام' }];
+            localStorage.setItem('shams_users', JSON.stringify(usersList));
+        }
+
+        // Login Handler
+        function handleLogin(e) {
+            e.preventDefault();
+            const uInput = document.getElementById('login_user').value.trim();
+            const pInput = document.getElementById('login_pass').value.trim();
+
+            const foundUser = usersList.find(u => u.username === uInput && u.password === pInput);
+
+            if(foundUser) {
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('appContent').style.display = 'block';
+                renderUsers();
+                renderArchive();
+                setTimeout(resizeCanvas, 300);
+            } else {
+                alert('خطأ: اسم المستخدم أو كلمة المرور غير صحيحة!');
+            }
+        }
+
+        function logoutSystem() {
+            document.getElementById('login_user').value = '';
+            document.getElementById('login_pass').value = '';
+            document.getElementById('authSection').style.display = 'flex';
+            document.getElementById('appContent').style.display = 'none';
+        }
+
+        // Digital Signature Canvas
+        const canvas = document.getElementById('sigCanvas');
+        const ctx = canvas.getContext('2d');
+        let writingString = false;
+
+        function resizeCanvas() {
+            if(canvas && canvas.parentElement) {
+                canvas.width = canvas.parentElement.clientWidth;
+                canvas.height = 120;
+            }
+        }
+        window.addEventListener('resize', resizeCanvas);
+
+        canvas.addEventListener('mousedown', startSig);
+        canvas.addEventListener('mouseup', stopSig);
+        canvas.addEventListener('mousemove', myDraw);
+        canvas.addEventListener('touchstart', (e) => { startSig(e.touches[0]); });
+        canvas.addEventListener('touchend', stopSig);
+        canvas.addEventListener('touchmove', (e) => { myDraw(e.touches[0]); e.preventDefault(); });
+
+        function startSig(e) { writingString = true; ctx.beginPath(); myDraw(e); }
+        function stopSig() { writingString = false; updateContractPreview(); }
+        function myDraw(e) {
+            if (!writingString) return;
+            const rect = canvas.getBoundingClientRect();
+            ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#000';
+            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
+            ctx.stroke(); ctx.beginPath();
+            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
+        }
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            document.getElementById('p_sigImg').style.display = 'none';
+        }
+
+        // Dynamic Contract Updates
+        function updateContractPreview() {
+            const name = document.getElementById('in_name').value || '...................';
+            const id = document.getElementById('in_id').value || '...................';
+            const phone = document.getElementById('in_phone').value || '...................';
+            const dob = document.getElementById('in_dob').value || '...................';
+            const dept = document.getElementById('in_dept').value || '...................';
+            const startDateVal = document.getElementById('in_startDate').value;
+            const durationVal = parseInt(document.getElementById('in_duration').value);
+
+            document.getElementById('p_name').innerText = name;
+            document.getElementById('p_id').innerText = id;
+            document.getElementById('p_phone').innerText = phone;
+            document.getElementById('p_dob').innerText = dob;
+            document.getElementById('p_dept').innerText = dept;
+            document.getElementById('p_duration').innerText = durationVal + ' أشهر';
+
+            let startDate = startDateVal ? new Date(startDateVal) : new Date();
+            let endDate = new Date(startDate);
+            endDate.setMonth(endDate.getMonth() + durationVal);
+
+            document.getElementById('p_startDate').innerText = startDate.toISOString().split('T')[0];
+            document.getElementById('p_endDate').innerText = endDate.toISOString().split('T')[0];
+
+            const sigImg = document.getElementById('p_sigImg');
+            sigImg.src = canvas.toDataURL();
+            sigImg.style.display = 'block';
+        }
+
+        // Add/Delete System Users
+        function addUser(e) {
+            e.preventDefault();
+            const name = document.getElementById('u_name').value;
+            const username = document.getElementById('u_username').value.trim();
+            const password = document.getElementById('u_password').value.trim();
+            const role = document.getElementById('u_role').value;
+
+            if(usersList.some(u => u.username === username)) {
+                alert('اسم المستخدم موجود بالفعل، يرجى اختيار اسم آخر.');
+                return;
+            }
+
+            usersList.push({ id: Date.now(), name, username, password, role });
+            localStorage.setItem('shams_users', JSON.stringify(usersList));
+            alert('تمت إضافة الحساب بنجاح!');
+            
+            document.getElementById('u_name').value = '';
+            document.getElementById('u_username').value = '';
+            document.getElementById('u_password').value = '';
+            renderUsers();
+        }
+
+        function deleteUser(id) {
+            if(usersList.length <= 1) {
+                alert('لا يمكن حذف حساب المسؤول الوحيد المتبقي!');
+                return;
+            }
+            if(confirm('هل أنت تأكد من حذف هذا الحساب؟')) {
+                usersList = usersList.filter(u => u.id !== id);
+                localStorage.setItem('shams_users', JSON.stringify(usersList));
+                renderUsers();
+            }
+        }
+
+        function renderUsers() {
+            const tbody = document.getElementById('usersTableBody');
+            document.getElementById('usersCount').innerText = usersList.length;
+            tbody.innerHTML = '';
+
+            usersList.forEach(u => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b>${u.name}</b></td>
+                        <td><code>${u.username}</code></td>
+                        <td><code>${u.password}</code></td>
+                        <td><span class="badge badge-active">${u.role}</span></td>
+                        <td><button onclick="deleteUser(${u.id})" class="btn-action btn-danger" style="padding: 4px 10px; font-size: 12px;"><i class="fas fa-trash"></i> حذف</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Archive Management
+        let contractsArchive = JSON.parse(localStorage.getItem('shams_contracts') || '[]');
+
+        function saveAndArchiveContract() {
+            const name = document.getElementById('in_name').value;
+            const id = document.getElementById('in_id').value;
+            if(!name || !id) { alert('يرجى كتابة الاسم الكامل ورقم الهوية أولاً'); return; }
+
+            const startDateVal = document.getElementById('in_startDate').value || new Date().toISOString().split('T')[0];
+            const durationVal = parseInt(document.getElementById('in_duration').value);
+            
+            let startDate = new Date(startDateVal);
+            let endDate = new Date(startDate);
+            endDate.setMonth(endDate.getMonth() + durationVal);
+
+            const newContract = {
+                id: Date.now(),
+                name: name,
+                nationalId: id,
+                dept: document.getElementById('in_dept').value || 'غير محدد',
+                startDate: startDate.toISOString().split('T')[0],
+                endDate: endDate.toISOString().split('T')[0]
+            };
+
+            contractsArchive.push(newContract);
+            localStorage.setItem('shams_contracts', JSON.stringify(contractsArchive));
+            alert('تم حفظ العقد بنجاح في الأرشيف!');
+            renderArchive();
+            switchTab('archiveTab');
+        }
+
+        function renderArchive() {
+            const tbody = document.getElementById('archiveTableBody');
+            document.getElementById('contractCount').innerText = contractsArchive.length;
+            tbody.innerHTML = '';
+            const today = new Date();
+
+            contractsArchive.forEach(c => {
+                const endD = new Date(c.endDate);
+                const diffDays = Math.ceil((endD - today) / (1000 * 60 * 60 * 24));
+
+                let badge = '<span class="badge badge-active">ساري</span>';
+                if(diffDays < 0) {
+                    badge = '<span class="badge badge-expired">منتهي</span>';
+                } else if(diffDays <= 7) {
+                    badge = `<span class="badge badge-warning">ينتهي خلال ${diffDays} يوم</span>`;
+                }
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b>${c.name}</b></td>
+                        <td>${c.nationalId}</td>
+                        <td>${c.dept}</td>
+                        <td>${c.startDate}</td>
+                        <td>${c.endDate}</td>
+                        <td>${badge}</td>
+                        <td><button onclick="window.print()" class="btn-action btn-navy" style="padding:4px 10px; font-size:12px;"><i class="fas fa-print"></i> طباعة</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.getElementById('createTab').style.display = tabId === 'createTab' ? 'block' : 'none';
+            document.getElementById('archiveTab').style.display = tabId === 'archiveTab' ? 'block' : 'none';
+            document.getElementById('usersTab').style.display = tabId === 'usersTab' ? 'block' : 'none';
+
+            document.getElementById('btn-create').classList.toggle('active', tabId === 'createTab');
+            document.getElementById('btn-archive').classList.toggle('active', tabId === 'archiveTab');
+            document.getElementById('btn-users').classList.toggle('active', tabId === 'usersTab');
+
+            if(tabId === 'archiveTab') renderArchive();
+            if(tabId === 'usersTab') renderUsers();
+        }
+
+        // Defaults
+        document.getElementById('in_startDate').value = new Date().toISOString().split('T')[0];
+        updateContractPreview();
+    </script>
 </body>
 </html>
