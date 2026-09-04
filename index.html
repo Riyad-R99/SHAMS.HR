@@ -392,6 +392,25 @@
         </div>
     </div>
 
+    <!-- Firebase SDK Integration -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-analytics.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAehKIHRrnIm-l6djL36mz5P7E_UED2PzE",
+            authDomain: "shamshr-b7b2b.firebaseapp.com",
+            projectId: "shamshr-b7b2b",
+            storageBucket: "shamshr-b7b2b.firebasestorage.app",
+            messagingSenderId: "1035491575998",
+            appId: "1:1035491575998:web:dfd07f262e72477706b6ef",
+            measurementId: "G-YD7EZJTJM9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+    </script>
+
     <script>
         // Accounts Logic Initialization
         let usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
