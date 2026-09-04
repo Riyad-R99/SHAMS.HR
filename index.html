@@ -132,6 +132,7 @@
         .btn-navy { background: var(--dark-navy); color: white; }
         .btn-green { background: #10b981; color: white; }
         .btn-danger { background: #ef4444; color: white; }
+        .btn-blue { background: #3b82f6; color: white; }
 
         /* Tables & Badges */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
@@ -151,11 +152,12 @@
 </head>
 <body>
 
+    <!-- Lock Screen / Login Overlay -->
     <div class="auth-overlay" id="authSection">
         <div class="auth-card">
             <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 100px; height: auto; max-height: 80px; object-fit: contain; margin-bottom: 10px;" onerror="this.style.display='none'">
             <h2>فريق شمس التطوعي</h2>
-            <p>أدخل بيانات الحساب السحابي الموحد</p>
+            <p>اسم الدخول الافتراضي: <b>admin</b> | كلمة المرور: <b>123456</b></p>
             
             <form onsubmit="handleLogin(event)">
                 <div class="form-group" style="margin-bottom: 12px;">
@@ -169,8 +171,10 @@
         </div>
     </div>
 
+    <!-- Main System Content -->
     <div id="appContent" style="display: none;">
         
+        <!-- Top Navigation Bar -->
         <div class="top-navbar">
             <div style="font-weight: 900; font-size: 18px;">فريق شمس التطوعي</div>
             <div class="nav-links">
@@ -184,6 +188,7 @@
 
         <div class="main-container">
             
+            <!-- Tab 1: New Contract Form & Preview -->
             <div id="createTab">
                 <div class="card-box no-print">
                     <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-edit"></i> تعبئة بيانات المتطوع الجديد</h3>
@@ -234,6 +239,7 @@
                     </div>
                 </div>
 
+                <!-- Contract Printable View -->
                 <div class="contract-paper" id="contractPaper">
                     <div style="text-align: right;">
                         <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 140px; height: auto; object-fit: contain;" onerror="this.style.display='none'">
@@ -276,6 +282,7 @@
                     <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">..../../....</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">..../../....</span> )</div>
                     <p style="font-size:14px; line-height: 1.8; margin-top: 5px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
 
+                    <!-- Signatures Section -->
                     <div class="sig-grid">
                         <div class="sig-box">
                             <div class="title">التوقيع</div>
@@ -295,6 +302,7 @@
                 </div>
             </div>
 
+            <!-- Tab 2: Attach External Contract -->
             <div id="uploadTab" style="display: none;">
                 <div class="card-box">
                     <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-cloud-upload-alt"></i> إرفاق عقد خارجي / موقع يدويًا</h3>
@@ -322,6 +330,7 @@
                 </div>
             </div>
 
+            <!-- Tab 3: Archive View -->
             <div id="archiveTab" style="display: none;">
                 <div class="card-box">
                     <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-archive"></i> أرشيف العقود المعتمدة والمرفقة (متزامن سحابياً)</h3>
@@ -342,9 +351,10 @@
                 </div>
             </div>
 
+            <!-- Tab 4: System Users Control (Admin Only) -->
             <div id="usersTab" style="display: none;">
                 <div class="card-box">
-                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد للنظام (يعمل على جميع الأجهزة)</h3>
+                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد للنظام</h3>
                     <form onsubmit="addUser(event)">
                         <div class="form-grid">
                             <div class="form-group">
@@ -380,7 +390,7 @@
                                 <th>اسم المستخدم</th>
                                 <th>كلمة المرور</th>
                                 <th>الصلاحية</th>
-                                <th>إجراءات</th>
+                                <th>إجراءات التعديل والحذف</th>
                             </tr>
                         </thead>
                         <tbody id="usersTableBody"></tbody>
@@ -391,9 +401,10 @@
         </div>
     </div>
 
+    <!-- Firebase SDK Integration & Cloud Sync Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAehKIHRrnIm-l6djL36mz5P7E_UED2PzE",
@@ -484,13 +495,31 @@
 
             try {
                 await addDoc(collection(db, "users"), { name, username, password, role });
-                alert('تمت إضافة المستخدم سحابياً بنجاح! يمكنه الآن الدخول من أي جهاز جوال أو كمبيوتر.');
+                alert('تمت إضافة المستخدم سحابياً بنجاح!');
                 document.getElementById('u_name').value = '';
                 document.getElementById('u_username').value = '';
                 document.getElementById('u_password').value = '';
                 await loadCloudData();
             } catch(err) {
                 alert('حدث خطأ أثناء الحفظ بالسحابة');
+            }
+        };
+
+        window.changeUserPassword = async function(docId, username) {
+            const newPass = prompt(`أدخل كلمة المرور الجديدة للمستخدم (${username}):`);
+            if(newPass === null) return; // Cancelled
+            if(newPass.trim() === '') {
+                alert('كلمة المرور لا يمكن أن تكون فارغة!');
+                return;
+            }
+
+            try {
+                const userRef = doc(db, "users", docId);
+                await updateDoc(userRef, { password: newPass.trim() });
+                alert('تم تحديث كلمة المرور سحابياً بنجاح!');
+                await loadCloudData();
+            } catch(err) {
+                alert('فشل تحديث كلمة المرور.');
             }
         };
 
@@ -682,7 +711,10 @@
                         <td><code>${u.username}</code></td>
                         <td><code>${u.password}</code></td>
                         <td><span class="badge badge-active">${u.role}</span></td>
-                        <td><button onclick="deleteUser('${u.id}', '${u.username}')" class="btn-action btn-danger" style="padding: 4px 10px; font-size: 12px;"><i class="fas fa-trash"></i> حذف</button></td>
+                        <td>
+                            <button onclick="changeUserPassword('${u.id}', '${u.username}')" class="btn-action btn-blue" style="padding: 4px 10px; font-size: 12px; margin-left: 5px;"><i class="fas fa-key"></i> تغيير كلمة المرور</button>
+                            <button onclick="deleteUser('${u.id}', '${u.username}')" class="btn-action btn-danger" style="padding: 4px 10px; font-size: 12px;"><i class="fas fa-trash"></i> حذف</button>
+                        </td>
                     </tr>
                 `;
             });
