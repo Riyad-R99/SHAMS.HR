@@ -6,9 +6,8 @@
     <title>منصة shamshr - إدارة عقود فريق شمس التطوعي</title>
     <style>
         :root {
-            --primary: #001233;
-            --accent: #ff8c00;
-            --light: #f8f9fa;
+            --primary: #0a192f;
+            --accent: #e65100;
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0a192f; color: #333; margin: 0; padding: 20px; }
         .container { max-width: 900px; margin: 0 auto; }
@@ -17,19 +16,40 @@
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
         .full-width { grid-column: span 2; }
         input, select, button { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 14px; }
-        button { background: var(--accent); color: white; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        button:hover { background: #e07b00; }
+        button { background: #f57c00; color: white; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        button:hover { background: #e65100; }
         .btn-secondary { background: #6c757d; }
         .btn-secondary:hover { background: #5a6268; }
         .hidden { display: none; }
         
-        /* تصميم العقد */
-        #contractPaper { background: white; padding: 40px; border: 1px solid #ddd; position: relative; font-size: 14px; line-height: 1.6; }
-        .contract-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--accent); padding-bottom: 15px; margin-bottom: 20px; }
-        .contract-title { text-align: center; margin: 20px 0; font-size: 20px; font-weight: bold; color: #000; }
-        .field-value { font-weight: bold; text-decoration: underline; padding: 0 5px; }
-        .signatures { display: flex; justify-content: space-between; margin-top: 40px; text-align: center; }
+        /* تصميم العقد المطابق للصورة */
+        #contractPaper { 
+            background: white; 
+            padding: 40px 50px; 
+            border: 1px solid #ddd; 
+            font-size: 15px; 
+            line-height: 1.8; 
+            color: #111;
+            box-sizing: border-box;
+        }
+        .contract-header { text-align: center; margin-bottom: 20px; }
+        .contract-header img { max-width: 280px; height: auto; }
+        .contract-title { text-align: center; font-size: 20px; font-weight: bold; margin: 15px 0; color: #000; }
+        .section-title { font-size: 17px; font-weight: bold; margin-top: 15px; margin-bottom: 5px; color: #000; }
+        .field-value { font-weight: bold; border-bottom: 1px dashed #333; padding: 0 8px; display: inline-block; }
+        ol { margin-top: 5px; padding-right: 25px; }
+        li { margin-bottom: 4px; }
         
+        .signatures-container { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end; 
+            margin-top: 40px; 
+            padding-top: 10px;
+        }
+        .signature-box { text-align: center; width: 30%; font-weight: bold; font-size: 14px; }
+        .signature-box img { max-width: 130px; height: auto; display: block; margin: 5px auto 0 auto; }
+
         /* جدول خزينة العقود */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 13px; }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
@@ -40,10 +60,9 @@
         .badge-expired { background: #dc3545; }
 
         @media print {
-            body * { visibility: hidden; }
-            #contractPaper, #contractPaper * { visibility: visible; }
-            #contractPaper { position: absolute; left: 0; top: 0; width: 100%; padding: 20px; }
+            body { background: white; padding: 0; }
             .no-print { display: none !important; }
+            #contractPaper { border: none; padding: 10px; width: 100%; }
         }
     </style>
 </head>
@@ -75,20 +94,19 @@
             <h3>إدخال بيانات عقد انضمام متطوع</h3>
             <div class="form-grid">
                 <div><label>تاريخ الاتفاق:</label><input type="date" id="agreeDate"></div>
-                <div><label>الاسم الكامل للمتطوع/ة:</label><input type="text" id="fullName" placeholder="اسم المتطوع"></div>
-                <div><label>رقم الهوية / الإقامة:</label><input type="text" id="nationalId" placeholder="1XXXXXXXXX"></div>
+                <div><label>اسم المتطوع/ة:</label><input type="text" id="fullName" placeholder="اسم المتطوع"></div>
+                <div><label>رقم الهوية:</label><input type="text" id="nationalId" placeholder="1XXXXXXXXX"></div>
                 <div><label>رقم الجوال:</label><input type="text" id="phone" placeholder="05XXXXXXXX"></div>
-                <div><label>القسم:</label><input type="text" id="department" placeholder="مثال: العلاقات العامة"></div>
-                <div><label>تاريخ الميلاد:</label><input type="date" id="dob"></div>
-                <div><label>تاريخ بدء العقد:</label><input type="date" id="startDate"></div>
+                <div class="full-width"><label>القسم:</label><input type="text" id="department" placeholder="مثال: الإدارة والتنظيم"></div>
+                <div><label>تاريخ بداية العقد:</label><input type="date" id="startDate"></div>
                 <div><label>مدة العقد (بالأشهر):</label><input type="number" id="durationMonths" value="3"></div>
                 <div class="full-width">
-                    <button onclick="generateContract()">توليد العقد للطباعة</button>
+                    <button onclick="generateContract()">توليد العقد المطابق للصورة</button>
                 </div>
             </div>
         </div>
 
-        <!-- 3. معاينة ورقة العقد -->
+        <!-- 3. معاينة ورقة العقد (مطابقة للصورة تماماً) -->
         <div id="contractPreviewSection" class="hidden">
             <div class="card no-print">
                 <button onclick="window.print()">🖨️ طباعة العقد / حفظ كـ PDF</button>
@@ -96,61 +114,65 @@
             </div>
 
             <div id="contractPaper" class="card">
-                <div class="contract-header">
-                    <div>
-                        <h2 style="margin:0; color:#d97706;">فريق شمس التطوعي</h2>
-                        <small>EXECUTIVE MANAGEMENT</small>
-                    </div>
-                    <div style="font-weight:bold;">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
-                </div>
+                
+                <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
 
-                <p>تم الاتفاق في تاريخ: (<span id="cAgreeDate" class="field-value"></span>) بين كل من:</p>
-                <p><b>الطرف الأول:</b> إدارة فريق (شمس) التطوعي</p>
-                <p><b>الطرف الثاني:</b> المتطوع/ة (<span id="cName" class="field-value"></span>)</p>
-                <p>رقم الهوية: (<span id="cId" class="field-value"></span>) | رقم الجوال: (<span id="cPhone" class="field-value"></span>)</p>
-                <p>القسم: (<span id="cDept" class="field-value"></span>) | تاريخ الميلاد: (<span id="cDob" class="field-value"></span>)</p>
+                <p style="margin-top:20px;">
+                    تم الاتفاق في تاريخ: ( <span id="cAgreeDate" class="field-value">/ / 2026</span> ) بين كل من<br>
+                    <b>الطرف الأول:</b> إدارة فريق (شمس) التطوعي<br>
+                    <b>الطرف الثاني:</b> المتطوع/ة ( <span id="cName" class="field-value"></span> )<br>
+                    رقم الهوية ( <span id="cId" class="field-value"></span> )<br>
+                    رقم الجوال ( <span id="cPhone" class="field-value"></span> )<br>
+                    القسم ( <span id="cDept" class="field-value"></span> )
+                </p>
 
-                <h4 style="color:#d97706;">أولاً : موضوع العقد</h4>
-                <p>انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
+                <div class="section-title">أولاً : موضوع العقد</div>
+                <p style="margin-top:0;">انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
 
-                <h4 style="color:#d97706;">ثانياً : واجبات المتطوع</h4>
+                <div class="section-title">ثانيًا : واجبات المتطوع</div>
                 <ol>
                     <li>تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
                     <li>الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
                     <li>الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
                     <li>الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
                     <li>عدم طلب الإعفاء خلال الشهر الأول.</li>
-                    <li>عند الرغبة بالانسحاب يجب الإبلاغ رسمياً.</li>
+                    <li>عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
                 </ol>
 
-                <h4 style="color:#d97706;">ثالثاً : حقوق الإدارة</h4>
+                <div class="section-title">ثالثًا : حقوق الإدارة</div>
                 <ol>
-                    <li>التعامل مع المتطوع باحترام وتدبير.</li>
+                    <li>التعامل مع المتطوع باحترام وتثدير.</li>
                     <li>منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
                     <li>عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
                     <li>توضيح أسباب إنهاء العقد عند حدوثه.</li>
                     <li>حفظ بيانات وسجلات المتطوع.</li>
                 </ol>
 
-                <h4 style="color:#d97706;">رابعاً : مدة العقد و إنهاؤه</h4>
-                <p>مدة العقد: (<span id="cDuration" class="field-value"></span>) أشهر</p>
-                <p>تبدأ من تاريخ: (<span id="cStart" class="field-value"></span>) وتنتهي في: (<span id="cEnd" class="field-value"></span>)</p>
-                <p>يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
+                <div class="section-title">رابعًا : مدة العقد و إنهاؤه</div>
+                <p style="margin-top:0;">
+                    مدة العقد: ( <span id="cDuration" class="field-value"></span> شهر )<br>
+                    تبدأ من تاريخ: ( <span id="cStart" class="field-value"></span> ) وتنتهي في: ( <span id="cEnd" class="field-value"></span> )<br>
+                    يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي
+                </p>
 
-                <div class="signatures">
-                    <div>
-                        <p>التوقيع</p>
-                        <p>_________________</p>
+                <div class="signatures-container">
+                    <div class="signature-box">
+                        التوقيع
+                        <br><br>
+                        _________________
                     </div>
-                    <div>
-                        <p>رئيس قسم الموارد البشرية</p>
-                        <p>_________________</p>
+                    <div class="signature-box">
+                        رئيس قسم الموارد البشرية
+                        <br><br>
+                        _________________
                     </div>
-                    <div>
-                        <p>توقيع الرئيس التنفيذي</p>
-                        <p>_________________</p>
+                    <div class="signature-box">
+                        توقيع الرئيس التنفيذي
+                        <br><br>
+                        _________________
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -182,7 +204,6 @@
                     </tr>
                 </thead>
                 <tbody id="vaultTableBody">
-                    <!-- سيتم إضافة العقود المرفوعة هنا -->
                 </tbody>
             </table>
         </div>
@@ -192,8 +213,9 @@
 </div>
 
 <script>
+    // الحسابات - يمكنك التعديل هنا (تأكد من الحروف الصغيرة والكبيرة)
     const users = {
-        "Riyad": "5454645"  
+        "Riyad": "5454645",
     };
 
     let contractsVault = [];
@@ -229,12 +251,11 @@
         const id = document.getElementById('nationalId').value;
         const phone = document.getElementById('phone').value;
         const dept = document.getElementById('department').value;
-        const dob = document.getElementById('dob').value;
         const start = document.getElementById('startDate').value;
         const duration = parseInt(document.getElementById('durationMonths').value);
 
         if(!name || !id || !start || !duration) {
-            alert("يرجى تعبئة كافة الحقول الأساسية");
+            alert("يرجى تعبئة الحقول الأساسية (الاسم، الهوية، تاريخ البداية، مدة العقد)");
             return;
         }
 
@@ -243,17 +264,22 @@
         startDateObj.setMonth(startDateObj.getMonth() + duration);
         let endDateStr = startDateObj.toISOString().split('T')[0];
 
-        document.getElementById('cAgreeDate').innerText = agreeDate || start;
+        function formatDate(dStr) {
+            if(!dStr) return "/ / 2026";
+            let parts = dStr.split('-');
+            return `${parts[2]} / ${parts[1]} / ${parts[0]}`;
+        }
+
+        document.getElementById('cAgreeDate').innerText = formatDate(agreeDate || start);
         document.getElementById('cName').innerText = name;
         document.getElementById('cId').innerText = id;
         document.getElementById('cPhone').innerText = phone;
         document.getElementById('cDept').innerText = dept;
-        document.getElementById('cDob').innerText = dob;
         document.getElementById('cDuration').innerText = duration;
-        document.getElementById('cStart').innerText = start;
-        document.getElementById('cEnd').innerText = endDateStr;
+        document.getElementById('cStart').innerText = formatDate(start);
+        document.getElementById('cEnd').innerText = formatDate(endDateStr);
 
-        // تجهيز بيانات الرفع التلقائية
+        // تجهيز بيانات الرفع تلقائياً
         document.getElementById('upName').value = name;
         document.getElementById('upId').value = id;
         document.getElementById('upEndDate').value = endDateStr;
