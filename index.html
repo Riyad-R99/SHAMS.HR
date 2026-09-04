@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فريق شمس التطوعي - نظام إدارة العقود والمستخدمين</title>
+    <title>فريق شمس التطوعي - نظام إدارة وأرشيف العقود</title>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -23,32 +23,43 @@
             position: relative;
         }
 
-        /* Full Background Watermark */
-        body::before {
-            content: "";
+        /* Strict Auth Lock Screen */
+        .auth-overlay {
             position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 500px; height: 500px;
-            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500"><path fill="%23f37021" opacity="0.03" d="M250,50 C260,100 290,120 320,100 C310,140 350,160 380,140 C350,180 390,210 420,200 C370,230 400,270 420,300 C370,300 370,350 380,390 C340,360 320,400 300,430 C280,390 250,420 230,450 C230,400 190,410 170,430 C180,380 140,370 120,380 C150,340 120,310 90,300 C130,270 110,230 80,210 C120,200 120,160 100,130 C140,150 170,120 180,80 C200,120 230,100 250,50 Z"/></svg>') no-repeat center center;
-            background-size: contain;
-            pointer-events: none;
-            z-index: 0;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: var(--dark-navy);
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
 
-        /* Full Access Protection Screen */
-        .auth-container {
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; padding: 20px; position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: var(--bg-body); z-index: 9999;
-        }
         .auth-card {
-            background: #fff; border-radius: 16px; padding: 40px; width: 100%; max-width: 420px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; border: 1px solid #e1e6eb;
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            text-align: center;
         }
 
-        /* Navigation Bar */
+        .auth-card h2 {
+            color: var(--dark-navy);
+            font-size: 22px;
+            font-weight: 900;
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+        .auth-card p {
+            color: #64748b;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        /* Nav Bar */
         .top-navbar {
             background: var(--dark-navy); color: white; padding: 15px 30px;
             display: flex; justify-content: space-between; align-items: center;
@@ -62,10 +73,9 @@
             background: var(--primary-orange);
         }
 
-        /* Main Container */
+        /* Container & Cards Layout */
         .main-container { max-width: 950px; margin: 30px auto; padding: 0 20px; position: relative; z-index: 5; }
 
-        /* Card Elements */
         .card-box {
             background: white; padding: 30px; border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05); margin-bottom: 30px;
@@ -76,12 +86,7 @@
         .form-control { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; outline: none; }
         .form-control:focus { border-color: var(--primary-orange); }
 
-        /* Signature Canvas */
-        .sig-container { border: 2px dashed #ccc; border-radius: 8px; background: #fafafa; position: relative; }
-        canvas { width: 100%; height: 120px; cursor: crosshair; }
-        .clear-sig-btn { position: absolute; left: 10px; top: 10px; background: #e2e8f0; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; }
-
-        /* Contract Document */
+        /* Contract Paper Layout */
         .contract-paper {
             background: white; padding: 45px 50px; border-radius: 12px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.05); position: relative; overflow: hidden;
@@ -93,18 +98,19 @@
         .contract-ul { list-style: none; padding-right: 0; }
         .contract-ul li { font-size: 14px; line-height: 1.8; color: #222; font-weight: 500; }
 
-        /* Signatures Grid */
-        .sig-grid { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 40px; }
-        .sig-box { text-align: center; font-weight: 800; font-size: 13px; }
-        .sig-box img { max-width: 140px; max-height: 60px; display: block; margin: 10px auto 0; }
+        /* Signatures Layout */
+        .sig-grid { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; }
+        .sig-box { text-align: center; font-weight: 800; font-size: 13px; flex: 1; }
+        .sig-box .title { color: var(--dark-navy); margin-bottom: 10px; }
 
-        /* Buttons */
+        /* Action Buttons */
         .btn-action { padding: 10px 18px; border-radius: 6px; font-weight: 800; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
         .btn-orange { background: var(--primary-orange); color: white; }
         .btn-navy { background: var(--dark-navy); color: white; }
+        .btn-green { background: #10b981; color: white; }
         .btn-danger { background: #ef4444; color: white; }
 
-        /* Tables */
+        /* Tables & Badges */
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { padding: 12px; text-align: right; border-bottom: 1px solid #eee; font-size: 14px; }
         th { background: #f8fafc; color: var(--dark-navy); font-weight: 800; }
@@ -114,7 +120,7 @@
         .badge-expired { background: #fee2e2; color: #b91c1c; }
 
         @media print {
-            body::before, .top-navbar, .card-box, .btn-action, .no-print, .auth-container { display: none !important; }
+            .auth-overlay, .top-navbar, .card-box, .btn-action, .no-print { display: none !important; }
             .main-container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
             .contract-paper { box-shadow: none !important; padding: 20px !important; }
         }
@@ -122,49 +128,46 @@
 </head>
 <body>
 
-    <!-- Protected Login Overlay Screen -->
-    <div class="auth-container" id="authSection">
+    <!-- Lock Screen / Login Overlay (Cleaned - No default hints) -->
+    <div class="auth-overlay" id="authSection">
         <div class="auth-card">
-            <div style="margin-bottom: 15px;">
-                <svg width="140" height="70" viewBox="0 0 320 150" fill="none">
-                    <path d="M110,15 C118,38 135,45 150,38 C142,60 165,68 180,60 C165,75 180,90 195,90 C172,102 184,120 192,135 C168,128 158,146 150,158 C138,135 124,150 112,165 C105,150 93,132 70,140 C78,124 88,105 65,95 C80,95 95,80 80,65 C95,72 118,65 110,38 Z" fill="#f37021"/>
-                    <circle cx="120" cy="98" r="42" fill="#fbb03b"/>
-                </svg>
-            </div>
-            <h1 style="color: var(--dark-navy); font-size: 22px; font-weight: 900; margin-bottom: 6px;">فريق شمس التطوعي</h1>
-            <p style="color: #666; font-size: 13px; margin-bottom: 22px;">أدخل اسم المستخدم وكلمة المرور للوصول للنظام</p>
+            <svg width="120" height="60" viewBox="0 0 320 150" fill="none">
+                <path d="M110,15 C118,38 135,45 150,38 C142,60 165,68 180,60 C165,75 180,90 195,90 C172,102 184,120 192,135 C168,128 158,146 150,158 C138,135 124,150 112,165 C105,150 93,132 70,140 C78,124 88,105 65,95 C80,95 95,80 80,65 C95,72 118,65 110,38 Z" fill="#f37021"/>
+                <circle cx="120" cy="98" r="42" fill="#fbb03b"/>
+            </svg>
+            <h2>فريق شمس التطوعي</h2>
+            <p>يرجى إدخال اسم المستخدم وكلمة المرور للوصول للنظام</p>
+            
             <form onsubmit="handleLogin(event)">
-                <div class="form-group" style="margin-bottom: 14px;">
+                <div class="form-group" style="margin-bottom: 12px;">
                     <input type="text" id="login_user" class="form-control" placeholder="اسم المستخدم" required>
                 </div>
-                <div class="form-group" style="margin-bottom: 22px;">
+                <div class="form-group" style="margin-bottom: 20px;">
                     <input type="password" id="login_pass" class="form-control" placeholder="كلمة المرور" required>
                 </div>
-                <button type="submit" class="btn-action btn-orange" style="width: 100%; justify-content: center; font-size: 15px;">تسجيل الدخول</button>
+                <button type="submit" class="btn-action btn-orange" style="width: 100%; justify-content: center; font-size: 15px;"><i class="fas fa-lock-open"></i> دخول النظام</button>
             </form>
-            <div style="margin-top: 15px; font-size: 11px; color: #888;">
-                الحساب الرئيسي الأول: <b>admin</b> / كلمة المرور: <b>123456</b>
-            </div>
         </div>
     </div>
 
-    <!-- Main Protected System Area -->
+    <!-- Main System Content (Locked until authentication) -->
     <div id="appContent" style="display: none;">
         
-        <!-- Navbar -->
+        <!-- Top Navigation Bar -->
         <div class="top-navbar">
             <div style="font-weight: 900; font-size: 18px;">فريق شمس التطوعي</div>
             <div class="nav-links">
                 <button id="btn-create" class="active" onclick="switchTab('createTab')"><i class="fas fa-file-signature"></i> عقد جديد</button>
+                <button id="btn-upload" onclick="switchTab('uploadTab')"><i class="fas fa-file-upload"></i> إرفاق عقد خارجي</button>
                 <button id="btn-archive" onclick="switchTab('archiveTab')"><i class="fas fa-box-archive"></i> أرشيف العقود (<span id="contractCount">0</span>)</button>
                 <button id="btn-users" onclick="switchTab('usersTab')"><i class="fas fa-users-gear"></i> إدارة المستخدمين (<span id="usersCount">0</span>)</button>
             </div>
-            <button onclick="logoutSystem();" class="btn-action" style="background: #475569; color: white;"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</button>
+            <button onclick="logoutSystem();" class="btn-action" style="background: #475569; color: white;"><i class="fas fa-sign-out-alt"></i> خروج</button>
         </div>
 
         <div class="main-container">
             
-            <!-- Tab 1: Create Contract -->
+            <!-- Tab 1: New Contract Form & Preview -->
             <div id="createTab">
                 <div class="card-box no-print">
                     <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-edit"></i> تعبئة بيانات المتطوع الجديد</h3>
@@ -204,22 +207,14 @@
                         </div>
                     </div>
 
-                    <!-- Digital Signature Pad -->
-                    <div class="form-group" style="margin-bottom: 20px;">
-                        <label>التوقيع الرقمي للمتطوع</label>
-                        <div class="sig-container">
-                            <button class="clear-sig-btn" onclick="clearSignature()"><i class="fas fa-eraser"></i> مسح التوقيع</button>
-                            <canvas id="sigCanvas"></canvas>
-                        </div>
-                    </div>
-
-                    <div style="display: flex; gap: 10px;">
-                        <button onclick="saveAndArchiveContract()" class="btn-action btn-orange"><i class="fas fa-save"></i> حفظ وتوقيع العقد في الأرشيف</button>
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="saveAndArchiveContract()" class="btn-action btn-orange"><i class="fas fa-save"></i> حفظ العقد في الأرشيف</button>
+                        <button onclick="downloadContractHTML()" class="btn-action btn-green"><i class="fas fa-file-download"></i> تنزيل العقد (ملف)</button>
                         <button onclick="window.print()" class="btn-action btn-navy"><i class="fas fa-print"></i> طباعة العقد مباشر</button>
                     </div>
                 </div>
 
-                <!-- Printable Contract Paper Preview -->
+                <!-- Contract Printable View -->
                 <div class="contract-paper" id="contractPaper">
                     <div style="text-align: right;">
                         <svg width="180" height="80" viewBox="0 0 320 150" fill="none">
@@ -254,34 +249,70 @@
                     <div class="contract-row">تاريخ الانضمام: ( <span class="fill-val" id="p_startDate">2026/09/04</span> )</div>
                     <div class="contract-row">تاريخ الانتهاء التلقائي: ( <span class="fill-val" id="p_endDate">2026/10/04</span> )</div>
 
+                    <!-- Signatures Section with Fixed Visible President Signature -->
                     <div class="sig-grid">
                         <div class="sig-box">
-                            توقيع رئيس الموارد البشرية
-                            <div style="margin-top: 10px;">
-                                <svg width="100" height="30"><path d="M10,20 Q30,5 50,20 T90,8" fill="none" stroke="#000" stroke-width="2"/></svg>
-                            </div>
+                            <div class="title">توقيع رئيس الموارد البشرية</div>
+                            <svg width="120" height="40" viewBox="0 0 120 40">
+                                <path d="M 10 25 Q 35 5, 60 25 T 110 15" fill="none" stroke="#000a30" stroke-width="2.5"/>
+                            </svg>
                         </div>
-                        <div class="sig-box">توقيع الرئيس التنفيذي</div>
                         <div class="sig-box">
-                            توقيع المتطوع
-                            <div id="p_sigImgContainer"><img id="p_sigImg" src="" alt="" style="display:none;"></div>
+                            <div class="title">توقيع الرئيس التنفيذي</div>
+                            <!-- Highlighted President Signature -->
+                            <svg width="140" height="45" viewBox="0 0 140 45">
+                                <path d="M 10 30 C 30 5, 50 40, 80 10 C 100 25, 120 5, 130 20" fill="none" stroke="#f37021" stroke-width="3"/>
+                                <circle cx="85" cy="12" r="3" fill="#f37021"/>
+                            </svg>
+                        </div>
+                        <div class="sig-box">
+                            <div class="title">توقيع المتطوع</div>
+                            <div style="margin-top: 20px; font-weight: normal; color: #777;">(توقيع خطي عند الطباعة)</div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab 2: Archive View -->
+            <!-- Tab 2: Attach External Contract -->
+            <div id="uploadTab" style="display: none;">
+                <div class="card-box">
+                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-cloud-upload-alt"></i> إرفاق عقد خارجي / موقع يدويًا</h3>
+                    <form onsubmit="handleFileUpload(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>اسم المتطوع</label>
+                                <input type="text" id="up_name" class="form-control" placeholder="أدخل اسم المتطوع" required>
+                            </div>
+                            <div class="form-group">
+                                <label>رقم الهوية</label>
+                                <input type="text" id="up_id" class="form-control" placeholder="10 أرقام" required>
+                            </div>
+                            <div class="form-group">
+                                <label>القسم</label>
+                                <input type="text" id="up_dept" class="form-control" placeholder="اسم القسم" required>
+                            </div>
+                            <div class="form-group">
+                                <label>اختيار ملف العقد (PDF / صورة)</label>
+                                <input type="file" id="up_file" class="form-control" accept=".pdf,image/*" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-action btn-orange"><i class="fas fa-upload"></i> رفع وحفظ العقد بالأرشيف</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tab 3: Archive View -->
             <div id="archiveTab" style="display: none;">
                 <div class="card-box">
-                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-archive"></i> أرشيف العقود الموقعة</h3>
+                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-archive"></i> أرشيف العقود المعتمدة والمرفقة</h3>
                     <table>
                         <thead>
                             <tr>
                                 <th>اسم المتطوع</th>
                                 <th>الهوية</th>
                                 <th>القسم</th>
-                                <th>الانضمام</th>
-                                <th>الانتهاء</th>
+                                <th>تاريخ العقد</th>
+                                <th>نوع العقد</th>
                                 <th>الحالة والتنبيه</th>
                                 <th>إجراء</th>
                             </tr>
@@ -291,7 +322,7 @@
                 </div>
             </div>
 
-            <!-- Tab 3: Users Management -->
+            <!-- Tab 4: System Users Control -->
             <div id="usersTab" style="display: none;">
                 <div class="card-box">
                     <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد للنظام</h3>
@@ -322,7 +353,7 @@
                 </div>
 
                 <div class="card-box">
-                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-users"></i> قائمة حسابات الدخول المعتمدة</h3>
+                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-users"></i> حسابات الدخول المسجلة</h3>
                     <table>
                         <thead>
                             <tr>
@@ -342,14 +373,14 @@
     </div>
 
     <script>
-        // Accounts & Users Setup
+        // Accounts Logic Initialization
         let usersList = JSON.parse(localStorage.getItem('shams_users') || '[]');
         if(usersList.length === 0) {
             usersList = [{ id: 1, name: 'المدير العام', username: 'admin', password: '123456', role: 'مدير النظام' }];
             localStorage.setItem('shams_users', JSON.stringify(usersList));
         }
 
-        // Login Handler
+        // Authentication Handler
         function handleLogin(e) {
             e.preventDefault();
             const uInput = document.getElementById('login_user').value.trim();
@@ -362,7 +393,6 @@
                 document.getElementById('appContent').style.display = 'block';
                 renderUsers();
                 renderArchive();
-                setTimeout(resizeCanvas, 300);
             } else {
                 alert('خطأ: اسم المستخدم أو كلمة المرور غير صحيحة!');
             }
@@ -375,43 +405,7 @@
             document.getElementById('appContent').style.display = 'none';
         }
 
-        // Digital Signature Canvas
-        const canvas = document.getElementById('sigCanvas');
-        const ctx = canvas.getContext('2d');
-        let writingString = false;
-
-        function resizeCanvas() {
-            if(canvas && canvas.parentElement) {
-                canvas.width = canvas.parentElement.clientWidth;
-                canvas.height = 120;
-            }
-        }
-        window.addEventListener('resize', resizeCanvas);
-
-        canvas.addEventListener('mousedown', startSig);
-        canvas.addEventListener('mouseup', stopSig);
-        canvas.addEventListener('mousemove', myDraw);
-        canvas.addEventListener('touchstart', (e) => { startSig(e.touches[0]); });
-        canvas.addEventListener('touchend', stopSig);
-        canvas.addEventListener('touchmove', (e) => { myDraw(e.touches[0]); e.preventDefault(); });
-
-        function startSig(e) { writingString = true; ctx.beginPath(); myDraw(e); }
-        function stopSig() { writingString = false; updateContractPreview(); }
-        function myDraw(e) {
-            if (!writingString) return;
-            const rect = canvas.getBoundingClientRect();
-            ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#000';
-            ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
-            ctx.stroke(); ctx.beginPath();
-            ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
-        }
-
-        function clearSignature() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            document.getElementById('p_sigImg').style.display = 'none';
-        }
-
-        // Dynamic Contract Updates
+        // Live Preview Functions
         function updateContractPreview() {
             const name = document.getElementById('in_name').value || '...................';
             const id = document.getElementById('in_id').value || '...................';
@@ -434,13 +428,49 @@
 
             document.getElementById('p_startDate').innerText = startDate.toISOString().split('T')[0];
             document.getElementById('p_endDate').innerText = endDate.toISOString().split('T')[0];
-
-            const sigImg = document.getElementById('p_sigImg');
-            sigImg.src = canvas.toDataURL();
-            sigImg.style.display = 'block';
         }
 
-        // Add/Delete System Users
+        // Contract Download Feature
+        function downloadContractHTML() {
+            const name = document.getElementById('in_name').value || 'عقد_متطوع';
+            const content = document.getElementById('contractPaper').outerHTML;
+            const blob = new Blob([`<html><head><title>عقد ${name}</title><style>body{font-family:'Tajawal',sans-serif;padding:30px;}</style></head><body>${content}</body></html>`], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `عقد_${name}.html`;
+            a.click();
+        }
+
+        // Upload External File Feature
+        function handleFileUpload(e) {
+            e.preventDefault();
+            const name = document.getElementById('up_name').value;
+            const id = document.getElementById('up_id').value;
+            const dept = document.getElementById('up_dept').value;
+            const fileInput = document.getElementById('up_file');
+
+            if(fileInput.files.length === 0) return;
+
+            const fileName = fileInput.files[0].name;
+
+            const newContract = {
+                id: Date.now(),
+                name: name,
+                nationalId: id,
+                dept: dept,
+                startDate: new Date().toISOString().split('T')[0],
+                endDate: 'مرفق خارجي',
+                type: 'مرفق خارجي (' + fileName + ')'
+            };
+
+            contractsArchive.push(newContract);
+            localStorage.setItem('shams_contracts', JSON.stringify(contractsArchive));
+            alert('تم إرفاق العقد بنجاح في الأرشيف!');
+            renderArchive();
+            switchTab('archiveTab');
+        }
+
+        // User Management System
         function addUser(e) {
             e.preventDefault();
             const name = document.getElementById('u_name').value;
@@ -449,13 +479,13 @@
             const role = document.getElementById('u_role').value;
 
             if(usersList.some(u => u.username === username)) {
-                alert('اسم المستخدم موجود بالفعل، يرجى اختيار اسم آخر.');
+                alert('اسم المستخدم موجود بالفعل!');
                 return;
             }
 
             usersList.push({ id: Date.now(), name, username, password, role });
             localStorage.setItem('shams_users', JSON.stringify(usersList));
-            alert('تمت إضافة الحساب بنجاح!');
+            alert('تمت إضافة المستخدم بنجاح!');
             
             document.getElementById('u_name').value = '';
             document.getElementById('u_username').value = '';
@@ -465,10 +495,10 @@
 
         function deleteUser(id) {
             if(usersList.length <= 1) {
-                alert('لا يمكن حذف حساب المسؤول الوحيد المتبقي!');
+                alert('لا يمكن حذف المستخدم الوحيد!');
                 return;
             }
-            if(confirm('هل أنت تأكد من حذف هذا الحساب؟')) {
+            if(confirm('هل أنت تأكد من حذف هذا المستخدم؟')) {
                 usersList = usersList.filter(u => u.id !== id);
                 localStorage.setItem('shams_users', JSON.stringify(usersList));
                 renderUsers();
@@ -493,7 +523,7 @@
             });
         }
 
-        // Archive Management
+        // Archive Functions
         let contractsArchive = JSON.parse(localStorage.getItem('shams_contracts') || '[]');
 
         function saveAndArchiveContract() {
@@ -514,7 +544,8 @@
                 nationalId: id,
                 dept: document.getElementById('in_dept').value || 'غير محدد',
                 startDate: startDate.toISOString().split('T')[0],
-                endDate: endDate.toISOString().split('T')[0]
+                endDate: endDate.toISOString().split('T')[0],
+                type: 'عقد محرر بالنظام'
             };
 
             contractsArchive.push(newContract);
@@ -531,14 +562,15 @@
             const today = new Date();
 
             contractsArchive.forEach(c => {
-                const endD = new Date(c.endDate);
-                const diffDays = Math.ceil((endD - today) / (1000 * 60 * 60 * 24));
-
                 let badge = '<span class="badge badge-active">ساري</span>';
-                if(diffDays < 0) {
-                    badge = '<span class="badge badge-expired">منتهي</span>';
-                } else if(diffDays <= 7) {
-                    badge = `<span class="badge badge-warning">ينتهي خلال ${diffDays} يوم</span>`;
+                if(c.endDate !== 'مرفق خارجي') {
+                    const endD = new Date(c.endDate);
+                    const diffDays = Math.ceil((endD - today) / (1000 * 60 * 60 * 24));
+                    if(diffDays < 0) {
+                        badge = '<span class="badge badge-expired">منتهي</span>';
+                    } else if(diffDays <= 7) {
+                        badge = `<span class="badge badge-warning">ينتهي خلال ${diffDays} يوم</span>`;
+                    }
                 }
 
                 tbody.innerHTML += `
@@ -547,21 +579,23 @@
                         <td>${c.nationalId}</td>
                         <td>${c.dept}</td>
                         <td>${c.startDate}</td>
-                        <td>${c.endDate}</td>
+                        <td><small>${c.type || 'عقد محرر'}</small></td>
                         <td>${badge}</td>
-                        <td><button onclick="window.print()" class="btn-action btn-navy" style="padding:4px 10px; font-size:12px;"><i class="fas fa-print"></i> طباعة</button></td>
+                        <td><button onclick="window.print()" class="btn-action btn-navy" style="padding:4px 10px; font-size:12px;"><i class="fas fa-print"></i> عرض/طباعة</button></td>
                     </tr>
                 `;
             });
         }
 
-        // Tab Navigation
+        // Navigation Switcher
         function switchTab(tabId) {
             document.getElementById('createTab').style.display = tabId === 'createTab' ? 'block' : 'none';
+            document.getElementById('uploadTab').style.display = tabId === 'uploadTab' ? 'block' : 'none';
             document.getElementById('archiveTab').style.display = tabId === 'archiveTab' ? 'block' : 'none';
             document.getElementById('usersTab').style.display = tabId === 'usersTab' ? 'block' : 'none';
 
             document.getElementById('btn-create').classList.toggle('active', tabId === 'createTab');
+            document.getElementById('btn-upload').classList.toggle('active', tabId === 'uploadTab');
             document.getElementById('btn-archive').classList.toggle('active', tabId === 'archiveTab');
             document.getElementById('btn-users').classList.toggle('active', tabId === 'usersTab');
 
@@ -569,7 +603,6 @@
             if(tabId === 'usersTab') renderUsers();
         }
 
-        // Defaults
         document.getElementById('in_startDate').value = new Date().toISOString().split('T')[0];
         updateContractPreview();
     </script>
